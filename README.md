@@ -1,6 +1,6 @@
 # Workspace Buttons
 
-This is a GNOME shell extension for switching workspaces on the panel, based off of my fork of [WorkspaceBar](https://github.com/carmanaught/workspacebar), which itself was forked from [mbokil/workspacebar](https://github.com/mbokil/workspacebar). The extension requires at least GNOME 3.24, as it uses shorthand function/method declarations and template literals (backticks).
+This is a GNOME shell extension for switching workspaces on the panel, based off of my fork of [WorkspaceBar](https://gitlab.com/carmanaught/workspacebar), which itself was forked from [mbokil/workspacebar](https://github.com/mbokil/workspacebar). The extension requires at least GNOME 3.24, as it uses shorthand function/method declarations and template literals (backticks).
 
 The primary difference with this extension is that it uses PanelMenu.Button objects for each workspace button. Each of these buttons has a menu which contains a list of the windows on the workspace, allowing you to activate the application (credit to [lyonell/all-windows](https://github.com/lyonel/all-windows) for some of the code and ideas). The buttons also allow switching to a given workspace if the option to do so has been toggled on (with a choice between Primary and Secondary button, depending on preference).
 
@@ -35,15 +35,15 @@ This is the Workspace Label Color settings page which allows the changing the wo
 
 ![Workspace Buttons - Workspace Label Colors](http://i.imgur.com/MJOc61O.png)
 
-This is the Workspace Names settings page which is copied from the the Workspace Indicator extension (attributed in prefs.js) - [Gnome Extensions Page](https://extensions.gnome.org/extension/21/workspace-indicator/) - [Gnome Git](https://git.gnome.org/browse/gnome-shell-extensions/tree/extensions/workspace-indicator).
+This is the Workspace Names settings page which is copied from the the Workspace Indicator extension (attributed in prefs.js) - [Gnome Extensions Page](https://extensions.gnome.org/extension/21/workspace-indicator/) - [Gnome GitLab](https://gitlab.gnome.org/GNOME/gnome-shell-extensions/tree/master/extensions/workspace-indicator).
 
 ![Workspace Buttons - Workspace Names](http://i.imgur.com/OL469Q8.png)
 
 ## Changes from the WorkspaceBar extension
 
-The following features of the [WorkspaceBar](https://github.com/carmanaught/workspacebar) extension have not been included and there is no intention to reimplement them.
+The following features of the [WorkspaceBar](https://gitlab.com/carmanaught/workspacebar) extension have not been included and there is no intention to re-implement them.
 
-The **show overview** functionality is no longer provided as this used an enclosing button to trigger an enter/exit event and was also not something I used when there are various other methods available (the activites button itself or the hot-corner). It also seems to defeat the point of having buttons that you might want to use if mousing over them activates the overview.
+The **show overview** functionality is no longer provided as this used an enclosing button to trigger an enter/exit event and was also not something I used when there are various other methods available (the activities button itself or the hot-corner). It also seems to defeat the point of having buttons that you might want to use, if mousing over them activates the overview.
 
 The **mouse button to open preferences** has not been implemented, as this defaulted to a mouse right-click which can now open a menu. There is now a menu item to access the settings/preferences.
 
