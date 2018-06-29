@@ -1,6 +1,6 @@
 # Workspace Buttons
 
-This is a GNOME shell extension for switching workspaces on the panel, based off of my fork of [WorkspaceBar](https://gitlab.com/carmanaught/workspacebar), which itself was forked from [mbokil/workspacebar](https://github.com/mbokil/workspacebar). The extension requires at least GNOME 3.24, as it uses shorthand function/method declarations and template literals (backticks).
+This is a GNOME shell extension for switching workspaces on the panel, based off of my fork of [WorkspaceBar](https://gitlab.com/carmanaught/workspacebar), which itself was forked from [mbokil/workspacebar](https://github.com/mbokil/workspacebar). The extension requires at least GNOME 3.26, as it uses ES6 class syntax.
 
 The primary difference with this extension is that it uses PanelMenu.Button objects for each workspace button. Each of these buttons has a menu which contains a list of the windows on the workspace, allowing you to activate the application (credit to [lyonell/all-windows](https://github.com/lyonel/all-windows) for some of the code and ideas). The buttons also allow switching to a given workspace if the option to do so has been toggled on (with a choice between Primary and Secondary button, depending on preference).
 
@@ -35,9 +35,17 @@ This is the Workspace Label Color settings page which allows the changing the wo
 
 ![Workspace Buttons - Workspace Label Colors](http://i.imgur.com/MJOc61O.png)
 
-This is the Workspace Names settings page which is copied from the the Workspace Indicator extension (attributed in prefs.js) - [Gnome Extensions Page](https://extensions.gnome.org/extension/21/workspace-indicator/) - [Gnome GitLab](https://gitlab.gnome.org/GNOME/gnome-shell-extensions/tree/master/extensions/workspace-indicator).
+**Note:** The Workspace Names setting page has been removed so as not to need to keep the code updated in-line with changes to the official GNOME Workspace Indicator extension. To modify the workspace names, use something like `dconf-editor` and modify the value stored under:
 
-![Workspace Buttons - Workspace Names](http://i.imgur.com/OL469Q8.png)
+```
+/org/gnome/desktop/wm/preferences/workspace-names
+```
+
+The value for the list should be a series of values for each workspace in order, inside single quotes, separated by commas and bounded by square brackets, like so:
+
+```
+['Workspace 1', 'Workspace 2', 'Etc.']
+```
 
 ## Changes from the WorkspaceBar extension
 

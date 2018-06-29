@@ -1,9 +1,3 @@
-// Credit to gcampax and fmuellner who I have shamelessly taken the workspace
-// indicator settings from to add to a tab in the preferences, to get all the
-// preference changing and workspace label updating done from the one
-// extension (it doesn't seem to make much sense to have both extensions
-// active at the same time).
-
 const Gdk       = imports.gi.Gdk;
 const GdkPixbuf = imports.gi.GdkPixbuf;
 const Gio       = imports.gi.Gio;
@@ -53,9 +47,6 @@ const BUTTONS = [
     "Secondary"
 ]
 
-const WORKSPACE_SCHEMA = "org.gnome.desktop.wm.preferences";
-const WORKSPACE_KEY = "workspace-names";
-
 function debug(val) {
     val = `[ Workspace Buttons ]--------> ${val}`;
     global.log(val);
@@ -93,12 +84,11 @@ function getHexByColor(color) {
     return "#" + decToHex(red) + decToHex(green) + decToHex(blue);
 }
 
-const WorkspaceButtonsSettings = new GObject.Class({
-    Name: "WorkspaceButtonsGeneralPrefs",
-    Extends: Gtk.Grid,
+const WorkspaceButtonsSettings = GObject.registerClass(
+    class WorkspaceButtonsSettings extends Gtk.Grid {
     
-    _init: function(params) {
-        this.parent(params);
+    _init(params) {
+        super._init(params);
         this.margin = 10;
         this.column_spacing = 50;
         this.row_spacing = 10;
@@ -264,15 +254,14 @@ const WorkspaceButtonsSettings = new GObject.Class({
             this._settings.set_string(KEYS.buttonToActivate, BUTTONS[this.cmbButtonActivate.active]);
         });
         this.attach(this.cmbButtonActivate, 2, 7, 1, 1);
-    },
+    }
 });
 
-const WorkspaceButtonsWorkspaceFormat = new GObject.Class({
-    Name: "WorkspaceButtonsWorkspacePrefs",
-    Extends: Gtk.Grid,
+const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
+    class WorkspaceButtonsWorkspaceFormat extends Gtk.Grid {
     
-    _init: function(params) {
-        this.parent(params);
+    _init(params) {
+        super._init(params);
         this.margin = 10;
         this.column_spacing = 50;
         this.row_spacing = 10;
@@ -544,17 +533,17 @@ const WorkspaceButtonsWorkspaceFormat = new GObject.Class({
         this.txtActiveInd.connect ("changed", () => { this._onIndicatorChanged() });
         this.txtActiveInd.connect ("activate", () => { this._onIndicatorChanged() });
         this.attach(this.txtActiveInd, 2, 9, 1, 1);
-    },
+    }
     
-    _setWkspName: function(object) {
+    _setWkspName(object) {
         this._settings.set_boolean(KEYS.nameLabel, object.active);
-    },
+    }
     
-    _onSeparatorChanged: function() {
+    _onSeparatorChanged() {
         this._settings.set_string(KEYS.labelSeparator, this.txtSeparator.get_text());
-    },
+    }
     
-    _onIndicatorChanged: function() {
+    _onIndicatorChanged() {
         let arrIndicators = [];
         arrIndicators[0] = this.txtEmptyInd.get_text();
         arrIndicators[1] = this.txtInactiveInd.get_text();
@@ -563,12 +552,11 @@ const WorkspaceButtonsWorkspaceFormat = new GObject.Class({
     }
 });
 
-const WorkspaceButtonsWorkspaceColors = new GObject.Class({
-    Name: "WorkspaceButtonsWorkspaceColorPrefs",
-    Extends: Gtk.Grid,
+const WorkspaceButtonsWorkspaceColors = GObject.registerClass(
+    class WorkspaceButtonsWorkspaceColors extends Gtk.Grid {
     
-    _init: function(params) {
-        this.parent(params);
+    _init(params) {
+        super._init(params);
         this.margin = 10;
         this.column_spacing = 50;
         this.row_spacing = 10;
@@ -700,196 +688,6 @@ const WorkspaceButtonsWorkspaceColors = new GObject.Class({
             this.btnEmptyColor.set_color(getColorByHex(this._settings.get_string(KEYS.emptyColor)));
         })
         this.attach(this.btnDefaults, 1, 0, 2, 1);
-    },
-});
-
-const WorkspaceNameModel = new GObject.Class({
-    Name: "WorkspaceButtons.WorkspaceNameModel",
-    GTypeName: "WorkspaceNameModel",
-    Extends: Gtk.ListStore,
-
-    Columns: {
-        LABEL: 0,
-    },
-
-    _init: function(params) {
-        this.parent(params);
-        this.set_column_types([GObject.TYPE_STRING]);
-
-        this._wnsettings = new Gio.Settings({ schema_id: WORKSPACE_SCHEMA });
-        //this._wnsettings.connect("changed::workspace-names", () => { this._reloadFromSettings(); });
-
-        this._reloadFromSettings();
-
-        // Overriding class closure doesn't work, because GtkTreeModel
-        // plays tricks with marshallers and class closures
-        this.connect("row-changed", () => { this._onRowChanged(); });
-        this.connect("row-inserted", () => { this._onRowInserted(); });
-        this.connect("row-deleted", () => { this._onRowDeleted(); });
-    },
-
-    _reloadFromSettings: function() {
-        if (this._preventChanges)
-            return;
-        this._preventChanges = true;
-
-        let newNames = this._wnsettings.get_strv(WORKSPACE_KEY);
-
-        let i = 0;
-        let [ok, iter] = this.get_iter_first();
-        while (ok && i < newNames.length) {
-            this.set(iter, [this.Columns.LABEL], [newNames[i]]);
-
-            ok = this.iter_next(iter);
-            i++;
-        }
-
-        while (ok)
-            ok = this.remove(iter);
-
-        for ( ; i < newNames.length; i++) {
-            iter = this.append();
-            this.set(iter, [this.Columns.LABEL], [newNames[i]]);
-        }
-
-        this._preventChanges = false;
-    },
-
-    _onRowChanged: function(self, path, iter) {
-        if (this._preventChanges)
-            return;
-        this._preventChanges = true;
-
-        let index = path.get_indices()[0];
-        let names = this._wnsettings.get_strv(WORKSPACE_KEY);
-
-        if (index >= names.length) {
-            // fill with blanks
-            for (let i = names.length; i <= index; i++)
-                names[i] = "";
-        }
-
-        names[index] = this.get_value(iter, this.Columns.LABEL);
-
-        this._wnsettings.set_strv(WORKSPACE_KEY, names);
-
-        this._preventChanges = false;
-    },
-
-    _onRowInserted: function(self, path, iter) {
-        if (this._preventChanges)
-            return;
-        this._preventChanges = true;
-
-        let index = path.get_indices()[0];
-        let names = this._wnsettings.get_strv(WORKSPACE_KEY);
-        let label = this.get_value(iter, this.Columns.LABEL) || "";
-        names.splice(index, 0, label);
-
-        this._wnsettings.set_strv(WORKSPACE_KEY, names);
-
-        this._preventChanges = false;
-    },
-
-    _onRowDeleted: function(self, path) {
-        if (this._preventChanges)
-            return;
-        this._preventChanges = true;
-
-        let index = path.get_indices()[0];
-        let names = this._wnsettings.get_strv(WORKSPACE_KEY);
-
-        if (index >= names.length)
-            return;
-
-        names.splice(index, 1);
-
-        // compact the array
-        for (let i = names.length -1; i >= 0 && !names[i]; i++)
-            names.pop();
-
-        this._wnsettings.set_strv(WORKSPACE_KEY, names);
-
-        this._preventChanges = false;
-    },
-});
-
-const WorkspaceSettingsWidget = new GObject.Class({
-    Name: "WorkspaceButtons.WorkspaceSettingsWidget",
-    GTypeName: "WorkspaceSettingsWidget",
-    Extends: Gtk.Grid,
-
-    _init: function(params) {
-        this.parent(params);
-        this.margin = 12;
-        this.orientation = Gtk.Orientation.VERTICAL;
-
-        this.add(new Gtk.Label({ label: `<b>${_("Workspace Names")}</b>`,
-                                 use_markup: true, margin_bottom: 6,
-                                 hexpand: true, halign: Gtk.Align.START }));
-
-        let scrolled = new Gtk.ScrolledWindow({ shadow_type: Gtk.ShadowType.IN });
-        scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        this.add(scrolled);
-
-        this._store = new WorkspaceNameModel();
-        this._treeView = new Gtk.TreeView({ model: this._store,
-                                            headers_visible: false,
-                                            reorderable: true,
-                                            hexpand: true,
-                                            vexpand: true
-                                          });
-
-        let column = new Gtk.TreeViewColumn({ title: _("Name") });
-        let renderer = new Gtk.CellRendererText({ editable: true });
-        renderer.connect("edited", () => { this._cellEdited(); });
-        column.pack_start(renderer, true);
-        column.add_attribute(renderer, "text", this._store.Columns.LABEL);
-        this._treeView.append_column(column);
-
-        scrolled.add(this._treeView);
-
-        let toolbar = new Gtk.Toolbar({ icon_size: Gtk.IconSize.SMALL_TOOLBAR });
-        toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
-
-        let newButton = new Gtk.ToolButton({ icon_name: "list-add-symbolic" });
-        newButton.connect("clicked", () => { this._newClicked(); });
-        toolbar.add(newButton);
-
-        let delButton = new Gtk.ToolButton({ icon_name: "list-remove-symbolic" });
-        delButton.connect("clicked", () => { this._delClicked(); });
-        toolbar.add(delButton);
-
-        let selection = this._treeView.get_selection();
-        selection.connect("changed",
-            function() {
-                delButton.sensitive = selection.count_selected_rows() > 0;
-            });
-        delButton.sensitive = selection.count_selected_rows() > 0;
-
-        this.add(toolbar);
-    },
-
-    _cellEdited: function(renderer, path, new_text) {
-        let [ok, iter] = this._store.get_iter_from_string(path);
-
-        if (ok)
-            this._store.set(iter, [this._store.Columns.LABEL], [new_text]);
-    },
-
-    _newClicked: function() {
-        let iter = this._store.append();
-        let index = this._store.get_path(iter).get_indices()[0];
-
-        let label = _("Workspace %d").format(index + 1);
-        this._store.set(iter, [this._store.Columns.LABEL], [label]);
-    },
-
-    _delClicked: function() {
-        let [any, model, iter] = this._treeView.get_selection().get_selected();
-
-        if (any)
-            this._store.remove(iter);
     }
 });
 
@@ -918,12 +716,6 @@ function buildPrefsWidget() {
     this.wsColors.add(new WorkspaceButtonsWorkspaceColors);
     this.notebook.append_page(this.wsColors, new Gtk.Label({label: _("Workspace Label Colors")}));
     
-    // Add the workspace names page
-    this.wsNamePage = new Gtk.Box();
-    this.wsNamePage.border_width = 10;
-    this.wsNamePage.add(new WorkspaceSettingsWidget);
-    this.notebook.append_page(this.wsNamePage, new Gtk.Label({label: _("Workspace Names")}));
-
     this.notebook.show_all();
     return notebook;
 }

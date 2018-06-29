@@ -56,24 +56,9 @@ function debug(val) {
     global.log(val);
 }
 
-const WorkspaceButton = Lang.Class({
-    Name: "WorkspaceButton",
-    Extends: PanelMenu.Button,
-    
-    _screenSignals: null,
-    _displaySignals: null,
-    _settingsSignals: null,
-    
-    destroy() {
-        // Disconnect from signals we've connected to
-        this._disconnectSignals();
-
-        // Call parent
-        this.parent();
-    },
-    
-    _init(params) {
-        this.parent(0.0, "WorkspaceButton");
+class WorkspaceButton extends PanelMenu.Button {
+    constructor(params) {
+        super(0.0, "WorkspaceButton");
         
         // Check for and get the index property
         if (params && params.hasOwnProperty("index")) {
@@ -113,8 +98,16 @@ const WorkspaceButton = Lang.Class({
         // Add a delay so that the this.metaWorkspace.list_windows() of the _updateMenu function
         // will work properly, otherwise we'll have an empty window list.
         this._updateMenu();
-    },
+    }
     
+    destroy() {
+        // Disconnect from signals we've connected to
+        this._disconnectSignals();
+
+        // Call parent
+        super.destroy();
+    }
+
     // I'm not sure about touch handling here. Ideally a regular touch should toggle the
     // menu, and a hold touch should bring the menu up after a short period, but I have
     // no touch device to test, so I'll leave the TOUCH_END to trigger the toggle.
@@ -143,7 +136,7 @@ const WorkspaceButton = Lang.Class({
         }
         
         return Clutter.EVENT_PROPAGATE;
-    },
+    }
     
     _initSettings() {
         // Event/action (wraparound)
@@ -160,7 +153,7 @@ const WorkspaceButton = Lang.Class({
         this.indStyle = _settings.get_boolean(KEYS.indLabel);
         this.activityIndicators = [];
         this.activityIndicators = _settings.get_strv(KEYS.labelIndicators);
-    },
+    }
     
     _connectSignals() {
         // Seperate the signals into arrays to make it easier to disconnect them
@@ -297,7 +290,7 @@ const WorkspaceButton = Lang.Class({
                 this._updateStyle();
             }
         })
-    },
+    }
     
     _disconnectSignals() {
         let display = global.screen.get_display();
@@ -335,7 +328,7 @@ const WorkspaceButton = Lang.Class({
         this.menu.disconnect(this._menuStateSignal);
         this.actor.disconnect(this._hoverOverSignal);
         this.actor.disconnect(this._hoverOutSignal);
-    },
+    }
     
     _updateMenu() {
         this.menu.removeAll();
@@ -402,7 +395,7 @@ const WorkspaceButton = Lang.Class({
             emptyItem.actor.can_focus = false;
             this.menu.addMenuItem(emptyItem);
         }
-    },
+    }
     
     _updateStyle() {
         this.currentWorkSpace = global.screen.get_active_workspace().index()
@@ -434,7 +427,7 @@ const WorkspaceButton = Lang.Class({
             let emptyStyle = (this.emptyWorkspaceStyle === true) ? styleEmpty : styleInactive;
             this.workspaceLabel.style = emptyStyle;
         }
-    },
+    }
     
     _updateLabel() {
         let workspaceName = Meta.prefs_get_workspace_name(this._wsIndex);
@@ -502,7 +495,7 @@ const WorkspaceButton = Lang.Class({
         }
         
         this.workspaceLabel.text = str;
-    },
+    }
     
     _setWorkspace(index) {
         // Taken from workspace-indicator
@@ -510,7 +503,7 @@ const WorkspaceButton = Lang.Class({
 	        let metaWorkspace = global.screen.get_workspace_by_index(index);
 	        metaWorkspace.activate(global.get_current_time());
         }
-    },
+    }
     
     _activateScroll(offSet) {
         this.currentWorkSpace = global.screen.get_active_workspace().index() + offSet;
@@ -530,7 +523,7 @@ const WorkspaceButton = Lang.Class({
         if (this.currentWorkSpace > workSpaces) this.currentWorkSpace = scrollFwd;
         
         this._setWorkspace(this.currentWorkSpace);
-    },
+    }
     
     _scrollWorkspace(actor, event) {
         let direction = event.get_scroll_direction();
@@ -545,21 +538,21 @@ const WorkspaceButton = Lang.Class({
         }
 
         this._activateScroll(offSet);
-    },
+    }
     
     _activateWindow(metaWorkspace, metaWindow) {
         if(!metaWindow.is_on_all_workspaces()) { metaWorkspace.activate(global.get_current_time()); }
         metaWindow.unminimize();
         metaWindow.unshade(global.get_current_time());
         metaWindow.activate(global.get_current_time());
-    },
+    }
     
     _ellipsizeString(str, len) {
         if(str.length > len) { 
             return `${str.substr(0, len)}...`;
         }
         return str; 
-    },
+    }
     
     _ellipsizeWindowTitle(window) {
         // If the get_title() returns a null value it causes an error in the
@@ -568,8 +561,8 @@ const WorkspaceButton = Lang.Class({
         // log during login of a Wayland session.
         if (window.get_title() === null) { return "Unnamed window"}
         else { return this._ellipsizeString(window.get_title(), 45); }
-    },
-});
+    }
+}
 
 let _settings;
 let globalSettingsSignals = null;
@@ -647,6 +640,11 @@ function init () {
     updateStyleList();
     // Get this to define which panel box to work with (_leftBox/_centerBox/_rightBox)
     panelBox = _settings.get_string(KEYS.buttonsPos);
+    // With the WorkspaceButton being changed to be an ES6 style class, we'll set the
+    // signals variables to null here.
+    WorkspaceButton._screenSignals = null
+    WorkspaceButton._displaySignals = null
+    WorkspaceButton._settingsSignals = null
 }
 
 function enable() {
