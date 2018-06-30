@@ -5,7 +5,6 @@ const GLib      = imports.gi.GLib;
 const GObject   = imports.gi.GObject;
 const Gtk       = imports.gi.Gtk;
 const Pango     = imports.gi.Pango;
-const Lang      = imports.lang;
 const Mainloop  = imports.mainloop;
 const Gettext   = imports.gettext;
 
