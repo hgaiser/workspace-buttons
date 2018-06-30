@@ -35,7 +35,7 @@ This is the Workspace Label Color settings page which allows the changing the wo
 
 ![Workspace Buttons - Workspace Label Colors](./screenshots/settings-workspace-label-colors.png?raw=true)
 
-**Note:** The Workspace Names setting page has been removed so as not to need to keep the code updated in-line with changes to the official GNOME Workspace Indicator extension. To modify the workspace names, use something like `dconf-editor` and modify the value stored under:
+**Note:** The 'Workspace Names' settings page has been removed so as not to need to keep the code updated in-line with changes to the official GNOME Workspace Indicator extension. To modify the workspace names, use something like `dconf-editor` and modify the value stored under:
 
 ```
 /org/gnome/desktop/wm/preferences/workspace-names
