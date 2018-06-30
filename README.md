@@ -8,7 +8,7 @@ While most of the functionality from the WorkspaceBar extension has been kept, s
 
 This is how the Workspace Buttons look like in action with the current choice of styling. For reference the hover/active style for the buttons themselves (not the labels) is from the gnome-shell theme in use when taking these screenshots, specifically [Vertex Theme](https://github.com/horst3180/vertex-theme).
 
-![Workspace Buttons in action](http://i.imgur.com/TvGCzvE.png)
+![Workspace Buttons in action](./screenshots/workspace-buttons-names.png?raw=true)
 - The active/current workspace defaults to bright white text
 - The urgent workspace with a window which is urgent or demands attention defaults to red text to draw attention to it
 - The inactive worspaces which have a window/application in them default to a light grey text
@@ -17,23 +17,23 @@ This is how the Workspace Buttons look like in action with the current choice of
 
 This is how the Workspace Buttons look using the Activity Indicator option and with some indicators in use. The indicators are  (U+F10C),  (U+F192),  (U+F111) for those interested. If you can't see the characters, you'll likely need [Font Awesome](http://fontawesome.io/icons/) (version 4, not 5) for them to be visible (check your distribution repositories). 
 
-![Workspace Buttons in action with activity indicators](http://i.imgur.com/VJZdxd9.png)
+![Workspace Buttons in action with activity indicators](./screenshots/workspace-buttons-indicators.png?raw=true)
 
 This is how the menu looks when opened. The left is the appearance with the panel at the top and the right is the appearance with the panel at the bottom (using BottomPanel - [Gnome Extensions Page](https://extensions.gnome.org/extension/949/bottompanel/) - [GitHub](https://github.com/Thoma5/gnome-shell-extension-bottompanel)).
 
-![Workspace Buttons with the menu open](http://i.imgur.com/R1WpVXv.png)
+![Workspace Buttons with the menu open](./screenshots/workspace-buttons-menus.png?raw=true)
 
 These are the General Settings on the Settings page.
 
-![Workspace Buttons - General Settings](https://i.imgur.com/AGpEZWu.png)
+![Workspace Buttons - General Settings](./screenshots/settings-general.png?raw=true)
 
 This is the Workspace Label Format settings page which is used to change the settings for how the workspace labels appear. The format settings are somewhat more extensive and allow a greater degree of customization.
 
-![Workspace Buttons - Workspace Label Format](http://i.imgur.com/I8SZnR9.png)
+![Workspace Buttons - Workspace Label Format](./screenshots/settings-workspace-label-format.png?raw=true)
 
 This is the Workspace Label Color settings page which allows the changing the workspace label colors, without needing to modify a stylesheet.css file.
 
-![Workspace Buttons - Workspace Label Colors](http://i.imgur.com/MJOc61O.png)
+![Workspace Buttons - Workspace Label Colors](./screenshots/settings-workspace-label-colors.png?raw=true)
 
 **Note:** The Workspace Names setting page has been removed so as not to need to keep the code updated in-line with changes to the official GNOME Workspace Indicator extension. To modify the workspace names, use something like `dconf-editor` and modify the value stored under:
 
