@@ -26,26 +26,7 @@ const Convenience = Me.imports.convenience;
 const Prefs = Me.imports.prefs;
 const PrefsDialog = "gnome-shell-extension-prefs workspace-buttons@carmanaught.gmail.com";
 
-const KEYS = {
-    buttonsPos:         "buttons-position",
-    buttonsPosChange:   "buttons-position-change",
-    buttonsPosIndex:    "buttons-position-index",
-    wrapAroundMode:     "wrap-around-mode",
-    clickToActivate:    "click-to-activate",
-    buttonToActivate:   "button-to-activate",
-    emptyWorkStyle:     "empty-workspace-style",
-    urgentWorkStyle:    "urgent-workspace-style",
-    numLabel:           "workspace-label-number",
-    nameLabel:          "workspace-label-name",
-    labelSeparator:     "workspace-label-separator",
-    indLabel:           "workspace-label-indicator",
-    labelIndicators:    "workspace-label-indicators",
-    urgentColor:        "urgent-color",
-    hoverColor:         "hover-color",
-    activeColor:        "active-color",
-    inactiveColor:      "inactive-color",
-    emptyColor:         "empty-color"
-};
+const KEYS = Me.imports.keys;
 
 const WORKSPACE_SCHEMA = "org.gnome.desktop.wm.preferences";
 const WORKSPACE_KEY = "workspace-names";
@@ -127,7 +108,7 @@ class WorkspaceButton extends PanelMenu.Button {
                 this._scrollWorkspace(actor, event);
                 doToggle = false;
             }
-                    
+            
             if (doToggle === true) {
                 this._updateMenu();
                 this.menu.toggle();
@@ -440,7 +421,7 @@ class WorkspaceButton extends PanelMenu.Button {
         let emptyName = false;
         // Check that workspace has label (returns "Workspace <Num>" if not),
         // which also explicitly blocks use of the word "Workspace" in a label.
-        if (workspaceName.indexOf("Workspace") !== -1) {
+        if (workspaceName.includes("Workspace")) {
             emptyName = true;
         }
         

@@ -15,26 +15,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 
-const KEYS = {
-    buttonsPos:         "buttons-position",
-    buttonsPosChange:   "buttons-position-change",
-    buttonsPosIndex:    "buttons-position-index",
-    wrapAroundMode:     "wrap-around-mode",
-    clickToActivate:    "click-to-activate",
-    buttonToActivate:   "button-to-activate",
-    emptyWorkStyle:     "empty-workspace-style",
-    urgentWorkStyle:    "urgent-workspace-style",
-    numLabel:           "workspace-label-number",
-    nameLabel:          "workspace-label-name",
-    labelSeparator:     "workspace-label-separator",
-    indLabel:           "workspace-label-indicator",
-    labelIndicators:    "workspace-label-indicators",
-    urgentColor:        "urgent-color",
-    hoverColor:         "hover-color",
-    activeColor:        "active-color",
-    inactiveColor:      "inactive-color",
-    emptyColor:         "empty-color"
-};
+const KEYS = Me.imports.keys;
 
 const POSITIONS = [
     "left",
