@@ -1,11 +1,9 @@
 const Gdk       = imports.gi.Gdk;
-const GdkPixbuf = imports.gi.GdkPixbuf;
 const Gio       = imports.gi.Gio;
 const GLib      = imports.gi.GLib;
 const GObject   = imports.gi.GObject;
 const Gtk       = imports.gi.Gtk;
 const Pango     = imports.gi.Pango;
-const Mainloop  = imports.mainloop;
 const Gettext   = imports.gettext;
 
 const _ = Gettext.domain("workspace-buttons").gettext;
