@@ -74,8 +74,6 @@ class WorkspaceButton extends PanelMenu.Button {
         
         // Connect to various signals
         this._connectSignals();
-        // Add a delay so that the this.metaWorkspace.list_windows() of the _updateMenu function
-        // will work properly, otherwise we'll have an empty window list.
         this._updateMenu();
     }
     
@@ -363,6 +361,9 @@ class WorkspaceButton extends PanelMenu.Button {
                 windowBox.add(new St.Label({ text: "   " }));
                 windowBox.add(windowItem._icon);
                 windowItem.actor.add_actor(windowBox);
+                if (metaWindow.appears_focused === true) {
+                    windowItem.setOrnament(PopupMenu.Ornament.DOT);
+                }
                 this.menu.addMenuItem(windowItem);
                 emptyMenu = false;
             }
@@ -520,10 +521,15 @@ class WorkspaceButton extends PanelMenu.Button {
     }
     
     _activateWindow(metaWorkspace, metaWindow) {
-        if(!metaWindow.is_on_all_workspaces()) { metaWorkspace.activate(global.get_current_time()); }
-        metaWindow.unminimize();
-        metaWindow.unshade(global.get_current_time());
-        metaWindow.activate(global.get_current_time());
+        if (metaWorkspace.index() !== this._wsIndex) {
+            if(!metaWindow.is_on_all_workspaces()) {
+                metaWorkspace.activate_with_focus(metaWindow, global.get_current_time());
+            } else {
+                metaWindow.activate(global.get_current_time());
+            }
+        } else {
+            metaWindow.activate(global.get_current_time());
+        }
     }
     
     _ellipsizeString(str, len) {
