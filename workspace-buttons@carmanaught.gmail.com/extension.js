@@ -38,7 +38,7 @@ function debug(val) {
 class WorkspaceButton extends PanelMenu.Button {
     constructor(params) {
         super(0.0, "WorkspaceButton");
-        
+
         // Check for and get the index property
         if (params && params.hasOwnProperty("index")) {
             this._wsIndex = params.index;
@@ -46,16 +46,16 @@ class WorkspaceButton extends PanelMenu.Button {
         } else {
             this._wsIndex = -1;
         }
-        this.metaWorkspace = global.screen.get_workspace_by_index(this._wsIndex);                
+        this.metaWorkspace = global.screen.get_workspace_by_index(this._wsIndex);
         // Change the button styling to reduce padding (normally "panel-button" style)
         this.actor.add_style_class_name("reduced-padding");
-        
+
         // Initialize settings before anything else
         this._initSettings();
-        
+
         // Create box layout
         this.workspaceButtonBox = new St.BoxLayout();
-        
+
         // Create workspace label
         this.workspaceLabel = new St.Label({
             text: "",
@@ -63,7 +63,7 @@ class WorkspaceButton extends PanelMenu.Button {
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER
         });
-        
+
         // Add the label to the button box and add the button box to this PanelMenu.Button
         this.workspaceButtonBox.add_child(this.workspaceLabel);
         this.actor.add_child(this.workspaceButtonBox);
@@ -71,12 +71,12 @@ class WorkspaceButton extends PanelMenu.Button {
         // Now that we've created the label, update the label text and style the label
         this._updateLabel();
         this._updateStyle();
-        
+
         // Connect to various signals
         this._connectSignals();
         this._updateMenu();
     }
-    
+
     destroy() {
         // Disconnect from signals we've connected to
         this._disconnectSignals();
@@ -100,21 +100,21 @@ class WorkspaceButton extends PanelMenu.Button {
                     }
                 }
             }
-            
+
             if (event.type() === Clutter.EventType.SCROLL) {
                 this._scrollWorkspace(actor, event);
                 doToggle = false;
             }
-            
+
             if (doToggle === true) {
                 this._updateMenu();
                 this.menu.toggle();
             }
         }
-        
+
         return Clutter.EVENT_PROPAGATE;
     }
-    
+
     _initSettings() {
         // Event/action (wraparound)
         this.wraparoundMode = _settings.get_boolean(KEYS.wrapAroundMode);
@@ -131,7 +131,7 @@ class WorkspaceButton extends PanelMenu.Button {
         this.activityIndicators = [];
         this.activityIndicators = _settings.get_strv(KEYS.labelIndicators);
     }
-    
+
     _connectSignals() {
         // Seperate the signals into arrays to make it easier to disconnect them
         // by looping through signals with identical disconnect methods
@@ -139,10 +139,10 @@ class WorkspaceButton extends PanelMenu.Button {
         this._displaySignals = [];
         this._settingsSignals = [];
         this._workspaceSignals = [];
-        
+
         this._windowTracker = Shell.WindowTracker.get_default();
         let display = global.screen.get_display();
-        
+
         // These are purely settings updates
         this._settingsSignals.push(_settings.connect("changed::" + KEYS.wrapAroundMode, () => {
             this.wraparoundMode = _settings.get_boolean(KEYS.wrapAroundMode);
@@ -153,7 +153,7 @@ class WorkspaceButton extends PanelMenu.Button {
         this._settingsSignals.push(_settings.connect("changed::" + KEYS.buttonToActivate, () => {
             this.buttonActivate = _settings.get_string(KEYS.buttonToActivate);
         }));
-        
+
         // Change the buttons style (applied to the label)
         this._settingsSignals.push(_settings.connect("changed::" + KEYS.emptyWorkStyle, () => {
             this.emptyWorkspaceStyle = _settings.get_boolean(KEYS.emptyWorkStyle);
@@ -163,7 +163,7 @@ class WorkspaceButton extends PanelMenu.Button {
             this.urgentWorkspaceStyle = _settings.get_boolean(KEYS.urgentWorkStyle);
             this._updateStyle();
         }));
-        
+
         // Change the text of the labels as needed
         this._settingsSignals.push(_settings.connect("changed::" + KEYS.numLabel, () => {
             this.wkspNumber = _settings.get_boolean(KEYS.numLabel);
@@ -186,13 +186,13 @@ class WorkspaceButton extends PanelMenu.Button {
             this.activityIndicators = _settings.get_strv(KEYS.labelIndicators);
             this._updateLabel();
         }));
-        
+
         // Detect workspace name changes and update the button labels accordingly
         this._wkspNameSettings = new Gio.Settings({ schema_id: WORKSPACE_SCHEMA });
         this._wkspNameSignal = this._wkspNameSettings.connect("changed::" + WORKSPACE_KEY, () => {
             this._updateLabel();
         });
-        
+
         // We'll need to update the workspace style when the workspace is changed and
         // also update the label to switch to/from the active workspace indicator
         this._screenSignals.push(global.screen.connect_after("workspace-switched", (screenObj, wsFrom, wsTo, wsDirection, wsPointer) => {
@@ -202,7 +202,7 @@ class WorkspaceButton extends PanelMenu.Button {
                 this._updateLabel();
             }
         }));
-        
+
         // This signal handler essentially replaces the "display" based 'window-created' signal
         // handler and helps trigger updates when windows are moved to workspaces without the
         // workspace itself being switched in the same action. This ignores windows considered
@@ -224,7 +224,7 @@ class WorkspaceButton extends PanelMenu.Button {
                 this._updateLabel();
             }
         }));
-        
+
         // Connect AFTER we've got display (let display above) to ensure we can get the signal
         // on "MetaScreen" and avoid errors and so the handler from ShellWindowTracker has
         // already run. We can then change the style of the workspaces that trigger these.
@@ -238,14 +238,14 @@ class WorkspaceButton extends PanelMenu.Button {
                 this._updateStyle();
             }
         }));
-        
+
         // Connect to the menu open-state-changed signal and update the menu
         this._menuStateSignal = this.menu.connect("open-state-changed", () => {
             this._updateMenu();
             this._updateStyle();
             this._updateLabel();
         });
-        
+
         // Connect to the signals for enter-event/leave-event for this button and change the
         // style as needed.
         this._hoverOverSignal = this.actor.connect("enter-event", () => {
@@ -268,51 +268,51 @@ class WorkspaceButton extends PanelMenu.Button {
             }
         })
     }
-    
+
     _disconnectSignals() {
         let display = global.screen.get_display();
-        
+
         // Disconnect settings signals
         for (let x = 0; x < this._settingsSignals.length; x++) {
             _settings.disconnect(this._settingsSignals[x]);
         }
         this._settingsSignals = [];
         this._settingsSignals = null;
-        
+
         this._wkspNameSettings.disconnect(this._wkspNameSignal);
-        
+
         // Disconnect screen signals
         for (let x = 0; x < this._screenSignals.length; x++) {
             global.screen.disconnect(this._screenSignals[x]);
         }
         this._screenSignals = [];
         this._screenSignals = null;
-        
+
         for (let x = 0; x < this._workspaceSignals.length; x++) {
             this.metaWorkspace.disconnect(this._workspaceSignals[x]);
         }
         this._workspaceSignals = [];
         this._workspaceSignals = null;
-        
+
         // Disconnect display signals
         for (let x = 0; x < this._displaySignals.length; x++) {
             display.disconnect(this._displaySignals[x]);
         }
         this._displaySignals = [];
         this._displaySignals = null;
-        
+
         // Disconnect various other signals
         this.menu.disconnect(this._menuStateSignal);
         this.actor.disconnect(this._hoverOverSignal);
         this.actor.disconnect(this._hoverOutSignal);
     }
-    
+
     _updateMenu() {
         this.menu.removeAll();
         let emptyMenu = true;
-        
+
         let workspaceName = Meta.prefs_get_workspace_name(this._wsIndex);
-        // Stop executing if the workspace is undefined, since it means the 
+        // Stop executing if the workspace is undefined, since it means the
         // workspace is probably gone.
         if (this.metaWorkspace === null) { return false; }
         let windowList = this.metaWorkspace.list_windows();
@@ -322,7 +322,7 @@ class WorkspaceButton extends PanelMenu.Button {
         let regularWindows = windowList.filter(function(w) {
             return !w.is_skip_taskbar() && !w.is_on_all_workspaces();
         });
-        
+
         let workspaceActivate = new PopupMenu.PopupMenuItem(`${_("Activate Workspace")} ${(this._wsIndex + 1)}`);
         workspaceActivate.connect("activate", () => { this._setWorkspace(this._wsIndex); });
         this.menu.addMenuItem(workspaceActivate);
@@ -330,7 +330,7 @@ class WorkspaceButton extends PanelMenu.Button {
         prefsActivate.connect("activate", () => { Main.Util.trySpawnCommandLine(PrefsDialog); });
         this.menu.addMenuItem(prefsActivate);
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        
+
         if (regularWindows.length > 0) {
             let workspaceLabel = new PopupMenu.PopupMenuItem(`${(this._wsIndex + 1)}: ${workspaceName}`);
             workspaceLabel.actor.reactive = false;
@@ -339,13 +339,13 @@ class WorkspaceButton extends PanelMenu.Button {
                 workspaceLabel.setOrnament(PopupMenu.Ornament.DOT);
             }
             this.menu.addMenuItem(workspaceLabel);
-            
+
             for ( let i = 0; i < regularWindows.length; ++i ) {
                 let metaWindow = regularWindows[i];
                 let windowItem = new PopupMenu.PopupBaseMenuItem();
                 windowItem.connect("activate", () => { this._activateWindow(this.metaWorkspace, metaWindow) });
                 windowItem._window = regularWindows[i];
-                
+
                 let windowApp = this._windowTracker.get_window_app(windowItem._window);
                 let windowBox = new St.BoxLayout( { x_expand: true  } );
                 // Stop executing if windowApp is null, since it means the window is probably gone.
@@ -368,7 +368,7 @@ class WorkspaceButton extends PanelMenu.Button {
                 emptyMenu = false;
             }
         }
-        
+
         if (emptyMenu) {
             let emptyItem = new PopupMenu.PopupMenuItem(_("No open windows"))
             emptyItem.actor.reactive = false;
@@ -376,12 +376,12 @@ class WorkspaceButton extends PanelMenu.Button {
             this.menu.addMenuItem(emptyItem);
         }
     }
-    
+
     _updateStyle() {
         this.currentWorkSpace = global.screen.get_active_workspace().index()
-        
+
         let workspaceName = Meta.prefs_get_workspace_name(this._wsIndex);
-        // Stop executing if the workspace is undefined, since it means the 
+        // Stop executing if the workspace is undefined, since it means the
         // workspace is probably gone.
         if (this.metaWorkspace == undefined) { return false; }
         let windowList = this.metaWorkspace.list_windows();
@@ -394,7 +394,7 @@ class WorkspaceButton extends PanelMenu.Button {
         let urgentWindows = windowList.filter(function(w) {
             return w.urgent || w.demands_attention;
         });
-        
+
         this.workspaceLabel._urgent = false;
         if (this._wsIndex !== this.currentWorkSpace && urgentWindows.length > 0 && this.urgentWorkspaceStyle === true) {
             this.workspaceLabel._urgent = true;
@@ -408,26 +408,26 @@ class WorkspaceButton extends PanelMenu.Button {
             this.workspaceLabel.style = emptyStyle;
         }
     }
-    
+
     _updateLabel() {
         let workspaceName = Meta.prefs_get_workspace_name(this._wsIndex);
         this.currentWorkSpace = global.screen.get_active_workspace().index();
-        
+
         let wsNum = "";
         let wsName = "";
         let str = "";
         let actIndicator = false;
-        
+
         let emptyName = false;
         // Check that workspace has label (returns "Workspace <Num>" if not),
         // which also explicitly blocks use of the word "Workspace" in a label.
         if (workspaceName.includes("Workspace")) {
             emptyName = true;
         }
-        
+
         wsNum = (this._wsIndex + 1).toString();
         wsName = workspaceName;
-        
+
         // Change workspace label depending on the use of activity indicators
         if (this.wkspNumber === true && this.wkspName === false) {
             str = wsNum;
@@ -448,8 +448,8 @@ class WorkspaceButton extends PanelMenu.Button {
                 else { str = wsNum + this.wkspLabelSeparator + wsName; }
             }
         }
-        
-        // Stop executing if the workspace is undefined, since it means the 
+
+        // Stop executing if the workspace is undefined, since it means the
         // workspace is probably gone.
         if (this.metaWorkspace === null) { return false; }
         let windowList = this.metaWorkspace.list_windows();
@@ -462,7 +462,7 @@ class WorkspaceButton extends PanelMenu.Button {
         let urgentWindows = windowList.filter(function(w) {
             return w.urgent || w.demands_attention;
         });
-        
+
         // Do checks to determine the format of the label
         if (this._wsIndex === this.currentWorkSpace) {
             str = (actIndicator === true) ? str + this.activityIndicators[2] : str;
@@ -473,10 +473,10 @@ class WorkspaceButton extends PanelMenu.Button {
         } else if (regularWindows.length > 0 || this._wsIndex !== this.currentWorkSpace) {
             str = (actIndicator === true) ? str + this.activityIndicators[1] : str;
         }
-        
+
         this.workspaceLabel.text = str;
     }
-    
+
     _setWorkspace(index) {
         // Taken from workspace-indicator
         if (index >= 0 && index < global.screen.n_workspaces) {
@@ -484,13 +484,13 @@ class WorkspaceButton extends PanelMenu.Button {
 	        metaWorkspace.activate(global.get_current_time());
         }
     }
-    
+
     _activateScroll(offSet) {
         this.currentWorkSpace = global.screen.get_active_workspace().index() + offSet;
         let workSpaces = global.screen.n_workspaces - 1;
         let scrollBack = 0;
         let scrollFwd = 0;
-        
+
         if (this.wraparoundMode ===  true) {
             scrollBack = workSpaces;
             scrollFwd = 0;
@@ -498,13 +498,13 @@ class WorkspaceButton extends PanelMenu.Button {
             scrollBack = 0;
             scrollFwd = workSpaces;
         }
-        
+
         if (this.currentWorkSpace < 0) this.currentWorkSpace = scrollBack;
         if (this.currentWorkSpace > workSpaces) this.currentWorkSpace = scrollFwd;
-        
+
         this._setWorkspace(this.currentWorkSpace);
     }
-    
+
     _scrollWorkspace(actor, event) {
         let direction = event.get_scroll_direction();
         let offSet = 0;
@@ -519,7 +519,7 @@ class WorkspaceButton extends PanelMenu.Button {
 
         this._activateScroll(offSet);
     }
-    
+
     _activateWindow(metaWorkspace, metaWindow) {
         if (metaWorkspace.index() !== this._wsIndex) {
             if(!metaWindow.is_on_all_workspaces()) {
@@ -531,14 +531,14 @@ class WorkspaceButton extends PanelMenu.Button {
             metaWindow.activate(global.get_current_time());
         }
     }
-    
+
     _ellipsizeString(str, len) {
-        if(str.length > len) { 
+        if(str.length > len) {
             return `${str.substr(0, len)}...`;
         }
-        return str; 
+        return str;
     }
-    
+
     _ellipsizeWindowTitle(window) {
         // If the get_title() returns a null value it causes an error in the
         // _ellipsizeString function, which this prevents by providing a string
@@ -581,11 +581,11 @@ function buildWorkspaceButtons () {
     let buttonsIndex = (buttonsIndexChange === true) ? _settings.get_int(KEYS.buttonsPosIndex) : 1
     panelBox = _settings.get_string(KEYS.buttonsPos)
     workspaceButton = [];
-    
+
     if (panelBox !== "right") {
         Main.panel[`_${panelBox}Box`].add_style_class_name("panel-spacing");
     }
-    
+
     var workSpaces = 0;
     workSpaces = global.screen.n_workspaces;
     for (let x = 0; x < workSpaces; x++) {
@@ -601,7 +601,7 @@ function destroyWorkspaceButtons () {
     if (panelBox !== "right") {
         Main.panel[`_${panelBox}Box`].remove_style_class_name("panel-spacing");
     }
-    
+
     var workSpaces = 0;
     workSpaces = global.screen.n_workspaces;
     while (workspaceButton.length > 0) {
@@ -651,10 +651,10 @@ function enable() {
             workspacesChanged = true;
         }
     }));
-    
+
     // Set signals to get changes when made to preferences
     globalSettingsSignals = [];
-    
+
     // Changes to these settings require a rebuild of the buttons
     globalSettingsSignals.push(_settings.connect_after("changed::" + KEYS.buttonsPos, () => {
         setPosition();
@@ -665,7 +665,7 @@ function enable() {
     globalSettingsSignals.push(_settings.connect_after("changed::" + KEYS.buttonsPosIndex, () => {
         setPosition();
     }));
-    
+
     // We need to trigger button color updates when any one of these is changed
     globalSettingsSignals.push(_settings.connect_after("changed::" + KEYS.urgentColor, () => {
         updateStyleList();
@@ -687,7 +687,7 @@ function enable() {
         updateStyleList();
         updateButtonStyles();
     }));
-    
+
     Mainloop.timeout_add(500, () => {
         buildWorkspaceButtons();
         return false;
@@ -700,12 +700,12 @@ function disable() {
     }
     workspaceSignals = [];
     workspaceSignals = null;
-    
+
     for (let x = 0; x < globalSettingsSignals.length; x++) {
         _settings.disconnect(globalSettingsSignals[x]);
     }
     globalSettingsSignals = [];
     globalSettingsSignals = null;
-    
+
     destroyWorkspaceButtons();
 }
