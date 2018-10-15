@@ -23,7 +23,7 @@ const POSITIONS = [
 const BUTTONS = [
     "Primary",
     "Secondary"
-]
+];
 
 function debug(val) {
     val = `[ Workspace Buttons ]--------> ${val}`;
@@ -222,7 +222,7 @@ const WorkspaceButtonsSettings = GObject.registerClass(
         });
 
         for (let i = 0; i < BUTTONS.length; i++) {
-            this.cmbPosition.append_text(BUTTONS[i]);
+            this.cmbButtonActivate.append_text(BUTTONS[i]);
         }
 
         this.cmbButtonActivate.append_text("Primary");
