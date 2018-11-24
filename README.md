@@ -15,7 +15,7 @@ This is how the Workspace Buttons look like in action with the current choice of
 - The empty workspaces with no window/application in them default to a dark grey text
 - Hovering over a workspace defaults to bright white text
 
-This is how the Workspace Buttons look using the Activity Indicator option and with some indicators in use. The indicators are  (U+F10C),  (U+F192),  (U+F111) for those interested. If you can't see the characters, you'll likely need [Font Awesome](http://fontawesome.io/icons/) (version 4, not 5) for them to be visible (check your distribution repositories). 
+This is how the Workspace Buttons look using the Activity Indicator option and with some indicators in use. The indicators are  (U+F10C),  (U+F192),  (U+F111) for those interested. If you can't see the characters, you'll likely need [Font Awesome](http://fontawesome.io/icons/) (version 4, not 5) for them to be visible (check your distribution repositories).
 
 ![Workspace Buttons in action with activity indicators](./screenshots/workspace-buttons-indicators.png?raw=true)
 
@@ -55,7 +55,9 @@ The **show overview** functionality is no longer provided as this used an enclos
 
 The **mouse button to open preferences** has not been implemented, as this defaulted to a mouse right-click which can now open a menu. There is now a menu item to access the settings/preferences.
 
-The **option for hiding empty workspaces** is no longer available, as it doesn't work properly with the ability to traverse left/right between workspaces and gets skipped over. While it could be made visual when scrolling workspaces (as is done in the WorkspaceBar extension), it loses a degree of accessibility.
+The following feature of the [WorkspaceBar](https://gitlab.com/carmanaught/workspacebar) extension has been partially implemented.
+
+The **option for hiding empty workspaces** will not produce the same sort of result, as completely hiding the buttons doesn't work properly with the ability to traverse left/right between workspaces and gets skipped over. Instead, the labels are hidden (made empty) for empty workspaces and becomes visible when the act of scrolling/switching workspaces to an empty workspace makes it active. This ensures that some degree of accessibility is not lost.
 
 The visual appearance is generally similar, but the bottom borders have been removed and will not be implemented as they can clash with gnome-shell themes that may already display an underline under a button when a menu is open. Due to removing the bottom borders, the workspace label colors have been adjusted slightly to provide more contrast.
 

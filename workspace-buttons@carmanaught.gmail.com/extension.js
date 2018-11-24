@@ -125,6 +125,7 @@ class WorkspaceButton extends PanelMenu.Button {
         this.emptyWorkspaceStyle = _settings.get_boolean(KEYS.emptyWorkStyle);
         this.urgentWorkspaceStyle = _settings.get_boolean(KEYS.urgentWorkStyle);
         // Workspace label
+        this.emptyWorkspaceHideLabel = _settings.get_boolean(KEYS.emptyWorkHideLabel);
         this.wkspNumber = _settings.get_boolean(KEYS.numLabel);
         this.wkspName = _settings.get_boolean(KEYS.nameLabel);
         this.wkspLabelSeparator = _settings.get_string(KEYS.labelSeparator);
@@ -166,6 +167,10 @@ class WorkspaceButton extends PanelMenu.Button {
         }));
 
         // Change the text of the labels as needed
+        this._settingsSignals.push(_settings.connect("changed::" + KEYS.emptyWorkHideLabel, () => {
+            this.emptyWorkspaceHideLabel = _settings.get_boolean(KEYS.emptyWorkHideLabel);
+            this._updateLabel();
+        }));
         this._settingsSignals.push(_settings.connect("changed::" + KEYS.numLabel, () => {
             this.wkspNumber = _settings.get_boolean(KEYS.numLabel);
             this._updateLabel();
@@ -469,6 +474,8 @@ class WorkspaceButton extends PanelMenu.Button {
             str = (actIndicator === true) ? str + this.activityIndicators[2] : str;
         } else if (urgentWindows.length > 0 || regularWindows.length > 0) {
             str = (actIndicator === true) ? str + this.activityIndicators[1] : str;
+        } else if (regularWindows.length === 0 && this.emptyWorkspaceHideLabel === true) {
+            str = "";
         } else if (regularWindows.length === 0 && this.emptyWorkspaceStyle === true) {
             str = (actIndicator === true) ? str + this.activityIndicators[0] : str;
         } else if (regularWindows.length > 0 || this.wsIndex !== this.currentWorkSpace) {

@@ -256,6 +256,27 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         });
         this.attach(lblWorkspaceFormat, 0, 0, 3, 1);
 
+        // Show Hide Empty Workspace Label label
+        let lblEmptyWorkspaceHideLabel = new Gtk.Label({
+            label: _("Hide label for empty workspace") + "\n<span font_size='small'>" + _("This will make empty workspace styling useless") + "</span>",
+            margin_left: 15,
+            use_markup: true,
+            sensitive: true,
+            halign: Gtk.Align.START
+        });
+        this.attach(lblEmptyWorkspaceHideLabel, 0, 1, 2, 1);
+
+        // Show Hide Empty Workspace Label switch
+        let swEmptyWorkspaceHideLabel = new Gtk.Switch({
+            active: this._settings.get_boolean(KEYS.emptyWorkHideLabel),
+            sensitive: true,
+            halign: Gtk.Align.END
+        });
+        swEmptyWorkspaceHideLabel.connect ("notify::active", () => {
+            this._settings.set_boolean(KEYS.emptyWorkHideLabel, swEmptyWorkspaceHideLabel.active);
+        });
+        this.attach(swEmptyWorkspaceHideLabel, 2, 1, 1, 1);
+
         // Show Empty Workspace label
         let lblEmptyWorkspace = new Gtk.Label({
             label: _("Enable styling to indicate empty workspaces"),
@@ -264,7 +285,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             sensitive: true,
             halign: Gtk.Align.START
         });
-        this.attach(lblEmptyWorkspace, 0, 1, 2, 1);
+        this.attach(lblEmptyWorkspace, 0, 2, 2, 1);
 
         // Show Empty Workspace switch
         let swEmptyWorkspace = new Gtk.Switch({
@@ -275,7 +296,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         swEmptyWorkspace.connect ("notify::active", () => {
             this._settings.set_boolean(KEYS.emptyWorkStyle, swEmptyWorkspace.active);
         });
-        this.attach(swEmptyWorkspace, 2, 1, 1, 1);
+        this.attach(swEmptyWorkspace, 2, 2, 1, 1);
 
         // Show Urgent Workspace label
         let lblUrgentWorkspace = new Gtk.Label({
@@ -283,7 +304,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             margin_left: 15,
             halign: Gtk.Align.START
         });
-        this.attach(lblUrgentWorkspace, 0, 2, 2, 1);
+        this.attach(lblUrgentWorkspace, 0, 3, 2, 1);
 
         // Show Urgent Workspace switch
         let swUrgentWorkspace = new Gtk.Switch({
@@ -293,7 +314,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         swUrgentWorkspace.connect ("notify::active", () => {
             this._settings.set_boolean(KEYS.urgentWorkStyle, swUrgentWorkspace.active);
         });
-        this.attach(swUrgentWorkspace, 2, 2, 1, 1);
+        this.attach(swUrgentWorkspace, 2, 3, 1, 1);
 
         // Show workspace numbers label
         let lblWkspNumber = new Gtk.Label({
@@ -302,7 +323,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             margin_left: 15,
             halign: Gtk.Align.START
         });
-        this.attach(lblWkspNumber, 0, 3, 2, 1);
+        this.attach(lblWkspNumber, 0, 4, 2, 1);
 
         // Show workspace numbers switch
         let swWkspNumber = new Gtk.Switch({
@@ -329,7 +350,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             }
 
         });
-        this.attach(swWkspNumber, 2, 3, 1, 1);
+        this.attach(swWkspNumber, 2, 4, 1, 1);
 
         // Show workspace names label
         let lblWkspName = new Gtk.Label({
@@ -338,7 +359,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             margin_left: 15,
             halign: Gtk.Align.START
         });
-        this.attach(lblWkspName, 0, 4, 2, 1);
+        this.attach(lblWkspName, 0, 5, 2, 1);
 
         // Show workspace names switch
         let swWkspName = new Gtk.Switch({
@@ -359,7 +380,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             lblWkspNumber.set_sensitive(swWkspName.active === true || swActInd.active === true ? true : false);
             swWkspNumber.set_sensitive(swWkspName.active === true || swActInd.active === true ? true : false);
         });
-        this.attach(swWkspName, 2, 4, 1, 1);
+        this.attach(swWkspName, 2, 5, 1, 1);
 
         // Workspace label separator label
         let lblSeparator = new Gtk.Label({
@@ -369,7 +390,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             sensitive: swWkspNumber.active === true && swWkspName.active === true ? true : false,
             halign: Gtk.Align.START
         });
-        this.attach(lblSeparator, 0, 5, 2, 1);
+        this.attach(lblSeparator, 0, 6, 2, 1);
 
         // Workspace label separator text entry
         this.txtSeparator = new Gtk.Entry({
@@ -380,7 +401,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         this.txtSeparator.set_text(this._settings.get_string(KEYS.labelSeparator));
         this.txtSeparator.connect ("changed", () => { this._onSeparatorChanged() });
         this.txtSeparator.connect ("activate", () => { this._onSeparatorChanged() });
-        this.attach(this.txtSeparator, 2, 5, 1, 1);
+        this.attach(this.txtSeparator, 2, 6, 1, 1);
 
         // Show activity indicators label
         let lblActInd = new Gtk.Label({
@@ -389,7 +410,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             use_markup: true,
             halign: Gtk.Align.START
         });
-        this.attach(lblActInd, 0, 6, 2, 1);
+        this.attach(lblActInd, 0, 7, 2, 1);
 
         // Show activity indicators switch
         let swActInd = new Gtk.Switch({
@@ -442,7 +463,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             lblActiveInd.set_sensitive(actIndEnable);
             this.txtActiveInd.set_sensitive(actIndEnable);
         });
-        this.attach(swActInd, 2, 6, 1, 1);
+        this.attach(swActInd, 2, 7, 1, 1);
 
         // Activity indicators label
         let lblActivityInd = new Gtk.Label({
@@ -450,7 +471,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             use_markup: true,
             halign: Gtk.Align.START
         });
-        this.attach(lblActivityInd, 0, 7, 3, 1);
+        this.attach(lblActivityInd, 0, 8, 3, 1);
 
         // Empty workspace activity indicator label
         let lblEmptyInd = new Gtk.Label({
@@ -466,7 +487,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             sensitive: this._settings.get_boolean(KEYS.indLabel) === true ? true : false,
             halign: Gtk.Align.CENTER
         });
-        this.attach(lblInactiveInd, 1, 8, 1, 1);
+        this.attach(lblInactiveInd, 1, 9, 1, 1);
 
         //Active workspace activity indicator label
         let lblActiveInd = new Gtk.Label({
@@ -474,7 +495,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             sensitive: this._settings.get_boolean(KEYS.indLabel) === true ? true : false,
             halign: Gtk.Align.CENTER
         });
-        this.attach(lblActiveInd, 2, 8, 1, 1);
+        this.attach(lblActiveInd, 2, 9, 1, 1);
 
         // Get the array of workspace label indicators
         let indList = this._settings.get_strv(KEYS.labelIndicators);
@@ -488,7 +509,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         this.txtEmptyInd.set_text(indList[0] !== undefined ? indList[0] : "");
         this.txtEmptyInd.connect ("changed", () => { this._onIndicatorChanged() });
         this.txtEmptyInd.connect ("activate", () => { this._onIndicatorChanged() });
-        this.attach(this.txtEmptyInd, 0, 9, 1, 1);
+        this.attach(this.txtEmptyInd, 0, 10, 1, 1);
 
         // Inactive workspace activity indicator text entry
         this.txtInactiveInd = new Gtk.Entry({
@@ -499,7 +520,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         this.txtInactiveInd.set_text(indList[1] !== undefined ? indList[1] : "");
         this.txtInactiveInd.connect ("changed", () => { this._onIndicatorChanged() });
         this.txtInactiveInd.connect ("activate", () => { this._onIndicatorChanged() });
-        this.attach(this.txtInactiveInd, 1, 9, 1, 1);
+        this.attach(this.txtInactiveInd, 1, 10, 1, 1);
 
         // Active workspace activity indicator text entry
         this.txtActiveInd = new Gtk.Entry({
@@ -510,7 +531,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         this.txtActiveInd.set_text(indList[2] !== undefined ? indList[2] : "");
         this.txtActiveInd.connect ("changed", () => { this._onIndicatorChanged() });
         this.txtActiveInd.connect ("activate", () => { this._onIndicatorChanged() });
-        this.attach(this.txtActiveInd, 2, 9, 1, 1);
+        this.attach(this.txtActiveInd, 2, 10, 1, 1);
     }
 
     _setWkspName(object) {

@@ -31,6 +31,11 @@
     	<summary>Button to use for click to activate.</summary>
       	<description>Specifies which button will be used to activate a workspace when the click to activate functionality is enabled.</description>
     </key>
+    <key type="b" name="empty-workspace-hide-label">
+     	<default>false</default>
+    	<summary>Enable hiding the label of empty workspaces.</summary>
+     	<description>Enables the hiding the label of empty workspaces (removes all text from the label).</description>
+    </key>
     <key type="b" name="empty-workspace-style">
      	<default>true</default>
     	<summary>Enable empty workspace styling.</summary>

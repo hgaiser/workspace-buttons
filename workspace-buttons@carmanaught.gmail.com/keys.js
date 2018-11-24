@@ -4,6 +4,7 @@ var buttonsPosIndex =    "buttons-position-index";
 var wrapAroundMode =     "wrap-around-mode";
 var clickToActivate =    "click-to-activate";
 var buttonToActivate =   "button-to-activate";
+var emptyWorkHideLabel = "empty-workspace-hide-label";
 var emptyWorkStyle =     "empty-workspace-style";
 var urgentWorkStyle =    "urgent-workspace-style";
 var numLabel =           "workspace-label-number";
