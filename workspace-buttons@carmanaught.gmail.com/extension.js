@@ -4,6 +4,7 @@
 
 const Clutter    = imports.gi.Clutter;
 const Gio        = imports.gi.Gio;
+const GObject    = imports.gi.GObject;
 const Meta       = imports.gi.Meta;
 const Shell      = imports.gi.Shell;
 const St         = imports.gi.St;
@@ -35,9 +36,10 @@ function debug(val) {
     global.log(val);
 }
 
+let WorkspaceButton = GObject.registerClass(
 class WorkspaceButton extends PanelMenu.Button {
-    constructor(params) {
-        super(0.0, "WorkspaceButton");
+    _init(params) {
+        super._init(0.0, "WorkspaceButton");
 
         // Check for and get the index property
         if (params && params.hasOwnProperty("index")) {
@@ -555,7 +557,7 @@ class WorkspaceButton extends PanelMenu.Button {
         if (window.get_title() === null) { return "Unnamed window"}
         else { return this._ellipsizeString(window.get_title(), 45); }
     }
-}
+});
 
 let _settings;
 let globalSettingsSignals = null;
