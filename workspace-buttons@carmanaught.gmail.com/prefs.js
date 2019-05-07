@@ -479,7 +479,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
             sensitive: this._settings.get_boolean(KEYS.indLabel) === true ? true : false,
             halign: Gtk.Align.CENTER
         });
-        this.attach(lblEmptyInd, 0, 8, 1, 1);
+        this.attach(lblEmptyInd, 0, 9, 1, 1);
 
         //Inactive workspace activity indicator label
         let lblInactiveInd = new Gtk.Label({
