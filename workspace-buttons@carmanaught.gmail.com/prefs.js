@@ -256,26 +256,26 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         });
         this.attach(lblWorkspaceFormat, 0, 0, 3, 1);
 
-        // Show Hide Empty Workspace Label label
-        let lblEmptyWorkspaceHideLabel = new Gtk.Label({
-            label: _("Hide label for empty workspace") + "\n<span font_size='small'>" + _("This will make empty workspace styling useless") + "</span>",
+        // Show Hide Empty Workspace label
+        let lblEmptyWorkspaceHide = new Gtk.Label({
+            label: _("Hide empty workspaces") + "\n<span font_size='small'>" + _("WARNING: This reduces accessibility and will make empty workspace styling useless") + "</span>",
             margin_left: 15,
             use_markup: true,
             sensitive: true,
             halign: Gtk.Align.START
         });
-        this.attach(lblEmptyWorkspaceHideLabel, 0, 1, 2, 1);
+        this.attach(lblEmptyWorkspaceHide, 0, 1, 2, 1);
 
         // Show Hide Empty Workspace Label switch
-        let swEmptyWorkspaceHideLabel = new Gtk.Switch({
-            active: this._settings.get_boolean(KEYS.emptyWorkHideLabel),
+        let swEmptyWorkspaceHide = new Gtk.Switch({
+            active: this._settings.get_boolean(KEYS.emptyWorkHide),
             sensitive: true,
             halign: Gtk.Align.END
         });
-        swEmptyWorkspaceHideLabel.connect ("notify::active", () => {
-            this._settings.set_boolean(KEYS.emptyWorkHideLabel, swEmptyWorkspaceHideLabel.active);
+        swEmptyWorkspaceHide.connect ("notify::active", () => {
+            this._settings.set_boolean(KEYS.emptyWorkHide, swEmptyWorkspaceHide.active);
         });
-        this.attach(swEmptyWorkspaceHideLabel, 2, 1, 1, 1);
+        this.attach(swEmptyWorkspaceHide, 2, 1, 1, 1);
 
         // Show Empty Workspace label
         let lblEmptyWorkspace = new Gtk.Label({

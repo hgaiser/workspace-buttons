@@ -129,7 +129,7 @@ class WorkspaceButton extends PanelMenu.Button {
         this.emptyWorkspaceStyle = _settings.get_boolean(KEYS.emptyWorkStyle);
         this.urgentWorkspaceStyle = _settings.get_boolean(KEYS.urgentWorkStyle);
         // Workspace label
-        this.emptyWorkspaceHideLabel = _settings.get_boolean(KEYS.emptyWorkHideLabel);
+        this.emptyWorkspaceHide = _settings.get_boolean(KEYS.emptyWorkHide);
         this.wkspNumber = _settings.get_boolean(KEYS.numLabel);
         this.wkspName = _settings.get_boolean(KEYS.nameLabel);
         this.wkspLabelSeparator = _settings.get_string(KEYS.labelSeparator);
@@ -169,12 +169,12 @@ class WorkspaceButton extends PanelMenu.Button {
             this.urgentWorkspaceStyle = _settings.get_boolean(KEYS.urgentWorkStyle);
             this._updateStyle();
         }));
+        this._settingsSignals.push(_settings.connect("changed::" + KEYS.emptyWorkHide, () => {
+            this.emptyWorkspaceHide = _settings.get_boolean(KEYS.emptyWorkHide);
+            this._updateStyle();
+        }));
 
         // Change the text of the labels as needed
-        this._settingsSignals.push(_settings.connect("changed::" + KEYS.emptyWorkHideLabel, () => {
-            this.emptyWorkspaceHideLabel = _settings.get_boolean(KEYS.emptyWorkHideLabel);
-            this._updateLabel();
-        }));
         this._settingsSignals.push(_settings.connect("changed::" + KEYS.numLabel, () => {
             this.wkspNumber = _settings.get_boolean(KEYS.numLabel);
             this._updateLabel();
@@ -405,6 +405,13 @@ class WorkspaceButton extends PanelMenu.Button {
             return w.urgent || w.demands_attention;
         });
 
+        // Show the workspace button if it's hidden when the workspace is current
+        if (this.wsIndex === this.currentWorkSpace && !this.visible)
+            this.visible = true;
+        // Also show the workspace button if the hidden workspace option is not set
+        if (!this.emptyWorkspaceHide && !this.visible)
+            this.visible = true;
+
         this.workspaceLabel._urgent = false;
         if (this.wsIndex !== this.currentWorkSpace && urgentWindows.length > 0 && this.urgentWorkspaceStyle === true) {
             this.workspaceLabel._urgent = true;
@@ -416,6 +423,10 @@ class WorkspaceButton extends PanelMenu.Button {
         } else {
             let emptyStyle = (this.emptyWorkspaceStyle === true) ? styleEmpty : styleInactive;
             this.workspaceLabel.style = emptyStyle;
+
+            // Hide the workspace button if configured (hidden workspaces lose accessiblity)
+            if (this.wsIndex !== this.currentWorkSpace && this.emptyWorkspaceHide)
+                this.visible = false;
         }
     }
 
@@ -478,8 +489,6 @@ class WorkspaceButton extends PanelMenu.Button {
             str = (actIndicator === true) ? str + this.activityIndicators[2] : str;
         } else if (urgentWindows.length > 0 || regularWindows.length > 0) {
             str = (actIndicator === true) ? str + this.activityIndicators[1] : str;
-        } else if (regularWindows.length === 0 && this.emptyWorkspaceHideLabel === true) {
-            str = "";
         } else if (regularWindows.length === 0 && this.emptyWorkspaceStyle === true) {
             str = (actIndicator === true) ? str + this.activityIndicators[0] : str;
         } else if (regularWindows.length > 0 || this.wsIndex !== this.currentWorkSpace) {
