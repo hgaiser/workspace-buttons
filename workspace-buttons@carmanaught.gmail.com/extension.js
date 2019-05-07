@@ -39,8 +39,6 @@ function debug(val) {
 let WorkspaceButton = GObject.registerClass(
 class WorkspaceButton extends PanelMenu.Button {
     _init(params) {
-        super._init(0.0, "WorkspaceButton");
-
         // Check for and get the index property
         if (params && params.hasOwnProperty("index")) {
             this.wsIndex = params.index;
@@ -48,6 +46,10 @@ class WorkspaceButton extends PanelMenu.Button {
         } else {
             this.wsIndex = -1;
         }
+
+        // Use the wsIndex value to define the nameText
+        super._init(0.0, `workspaceButton${this.wsIndex}`, false);
+
         this.workspaceManager = getWorkspaceManager();
         this.metaWorkspace = this.workspaceManager.get_workspace_by_index(this.wsIndex);
         // Change the button styling to reduce padding (normally "panel-button" style)
@@ -569,6 +571,7 @@ let styleInactive;
 let styleEmpty;
 
 let panelBox;
+let buttonBox;
 let workspaceButton;
 let workspaceSignals;
 
@@ -606,38 +609,72 @@ function buildWorkspaceButtons () {
     workspaceButton = [];
 
     if (panelBox !== "right") {
-        Main.panel[`_${panelBox}Box`].add_style_class_name("panel-spacing");
+        buttonBox.add_style_class_name("panel-spacing");
     }
 
     var workSpaces = 0;
     workSpaces = workspaceManager.n_workspaces;
     for (let x = 0; x < workSpaces; x++) {
         workspaceButton[x] = new WorkspaceButton({index: x});
-        if (Main.panel.statusArea[`workspaceButton${(x + 1)}`] !== undefined) {
-            Main.panel.statusArea[`workspaceButton${(x + 1)}`].destroy();
+        buttonBox.add_child(workspaceButton[x].container);
+    }
+
+    // Add the buttonBox in place of a single indicator
+    Main.panel[`_${panelBox}Box`].insert_child_at_index(buttonBox, buttonsIndex);
+
+    // Below code is based on _addToPanelBox() with some changes, ensuring that the indicators
+    // are still accessible and the menus work correctly.
+
+    // Hook-up each panel indicator almost the same as _addToPanelBox()
+    for (let buttonContainer of buttonBox.get_children()) {
+
+        // Get the actual button, not the container
+        let button = buttonContainer.get_child();
+
+        // Check that if there is already a role for the button/indicator (there shouldn't be).
+        if (Main.panel.statusArea[button.accessible_name]) {
+            log('Warning: there is already a status indicator for role ' + button.accessible_name +
+            '. Trying to destroy button');
+            button.destroy();
+            continue;
         }
-        Main.panel.addToStatusArea(`workspaceButton${(x + 1)}`, workspaceButton[x], (x + buttonsIndex), panelBox)
+
+        if (button.menu)
+            Main.panel.menuManager.addMenu(button.menu);
+
+        // statusArea[role] still points to real indicator
+        Main.panel.statusArea[`${button.accessible_name}`] = button;
+
+        let destroyId = button.connect('destroy', emitter => {
+            delete Main.panel.statusArea[button.accessible_name];
+            emitter.disconnect(destroyId);
+        });
+
+        // Add menu-set callbacks for buttons
+        button.connect('menu-set', Main.panel._onMenuSet.bind(Main.panel));
+        Main.panel._onMenuSet(button);
     }
 }
 
 function destroyWorkspaceButtons () {
-    let workspaceManager = getWorkspaceManager();
     if (panelBox !== "right") {
-        Main.panel[`_${panelBox}Box`].remove_style_class_name("panel-spacing");
+        buttonBox.remove_style_class_name("panel-spacing");
     }
 
-    var workSpaces = 0;
-    workSpaces = workspaceManager.n_workspaces;
-    while (workspaceButton.length > 0) {
-        let thisButton = workspaceButton.pop()
-        if (thisButton !== undefined) {
-            thisButton.destroy();
-        }
+    // Get the button containers
+    for (let buttonContainer of buttonBox.get_children()) {
+        // Get the actual button, not the container
+        let button = buttonContainer.get_child();
+        button.destroy();
     }
+
+    buttonBox.remove_all_children();
 }
 
 function setPosition() {
     destroyWorkspaceButtons();
+    let oldPanelBox = panelBox;
+    Main.panel[`_${oldPanelBox}Box`].remove_actor(buttonBox);
     Mainloop.timeout_add(100, () => {
         buildWorkspaceButtons();
         return false;
@@ -659,6 +696,8 @@ function init () {
 function enable() {
     let workspacesChanged = false;
     let workspaceManager = getWorkspaceManager();
+    buttonBox = new St.BoxLayout();
+    buttonBox.accessible_name = "buttonBox"
     workspaceSignals = [];
     // It's easiest if we rebuild the buttons when workspaces are removed or added
     workspaceSignals.push(workspaceManager.connect_after("notify::n-workspaces", (metaScreen, paramSpec) => {
