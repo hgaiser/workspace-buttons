@@ -629,7 +629,12 @@ function buildWorkspaceButtons () {
     }
 
     // Add the buttonBox in place of a single indicator
-    Main.panel[`_${panelBox}Box`].insert_child_at_index(buttonBox, buttonsIndex);
+    if (panelBox === 'left') {
+        // Do an additional check for the _leftBox to make sure it's after the activities button by default.
+        Main.panel[`_${panelBox}Box`].insert_child_at_index(buttonBox, (Main.panel[`_${panelBox}Box`].get_n_children() - 2 + buttonsIndex));
+    } else {
+        Main.panel[`_${panelBox}Box`].insert_child_at_index(buttonBox, buttonsIndex);
+    }
 
     // Below code is based on _addToPanelBox() with some changes, ensuring that the indicators
     // are still accessible and the menus work correctly.
