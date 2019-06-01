@@ -617,10 +617,6 @@ function buildWorkspaceButtons () {
     panelBox = _settings.get_string(KEYS.buttonsPos)
     workspaceButton = [];
 
-    if (panelBox !== "right") {
-        buttonBox.add_style_class_name("panel-spacing");
-    }
-
     var workSpaces = 0;
     workSpaces = workspaceManager.n_workspaces;
     for (let x = 0; x < workSpaces; x++) {
@@ -671,10 +667,6 @@ function buildWorkspaceButtons () {
 }
 
 function destroyWorkspaceButtons () {
-    if (panelBox !== "right") {
-        buttonBox.remove_style_class_name("panel-spacing");
-    }
-
     // Get the button containers
     for (let buttonContainer of buttonBox.get_children()) {
         // Get the actual button, not the container
