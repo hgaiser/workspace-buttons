@@ -682,7 +682,7 @@ function destroyWorkspaceButtons () {
         button.destroy();
     }
 
-    buttonBox.remove_all_children();
+    buttonBox.destroy_all_children();
 }
 
 function setPosition() {
@@ -788,4 +788,5 @@ function disable() {
     globalSettingsSignals = null;
 
     destroyWorkspaceButtons();
+    buttonBox.destroy();
 }
