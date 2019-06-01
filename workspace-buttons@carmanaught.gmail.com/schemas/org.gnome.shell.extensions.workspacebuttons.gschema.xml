@@ -96,5 +96,10 @@
       <summary>Empty workspace color.</summary>
       <description>Specifies the color to be used for workspaces without any windows active on them.</description>
     </key>
+    <key type="b" name="workspace-switcher-popup">
+      <default>false</default>
+      <summary>Workspace switcher popup visibility.</summary>
+      <description>Disable the workspace switcher popup.</description>
+    </key>
   </schema>
 </schemalist>
