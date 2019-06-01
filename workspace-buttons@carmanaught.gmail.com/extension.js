@@ -501,8 +501,8 @@ class WorkspaceButton extends PanelMenu.Button {
     _setWorkspace(index) {
         // Taken from workspace-indicator
         if (index >= 0 && index < this.workspaceManager.n_workspaces) {
-	        let metaWorkspace = this.workspaceManager.get_workspace_by_index(index);
-	        metaWorkspace.activate(global.get_current_time());
+            let metaWorkspace = this.workspaceManager.get_workspace_by_index(index);
+            metaWorkspace.activate(global.get_current_time());
         }
     }
 
