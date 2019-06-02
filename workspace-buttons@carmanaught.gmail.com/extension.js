@@ -338,7 +338,7 @@ class WorkspaceButton extends PanelMenu.Button {
         workspaceActivate.connect("activate", () => { this._setWorkspace(this.wsIndex); });
         this.menu.addMenuItem(workspaceActivate);
         let prefsActivate = new PopupMenu.PopupMenuItem(_("Settings"));
-        prefsActivate.connect("activate", () => { Main.Util.trySpawnCommandLine(PrefsDialog); });
+        prefsActivate.connect("activate", () => { Util.trySpawnCommandLine(PrefsDialog); });
         this.menu.addMenuItem(prefsActivate);
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
