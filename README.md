@@ -1,12 +1,12 @@
 # Workspace Buttons
 
-This is a GNOME shell extension for switching workspaces on the panel, based off of my fork of [WorkspaceBar](https://gitlab.com/carmanaught/workspacebar), which itself was forked from [mbokil/workspacebar](https://github.com/mbokil/workspacebar). The extension requires at least GNOME 3.26, as it uses ES6 class syntax.
+This is a GNOME shell extension for switching workspaces on the panel, based off of my fork of [WorkspaceBar](https://gitlab.com/carmanaught/workspacebar), which itself was forked from [mbokil/workspacebar](https://github.com/mbokil/workspacebar). I generally update the extension to work with the most recent GNOME version and try to follow changes to official GNOME extensions (e.g.  `registerClass` or `_init`/`constructor` changes) and I don't guarantee backwards compatibility.
 
 The primary difference with this extension is that it uses PanelMenu.Button objects for each workspace button. Each of these buttons has a menu which contains a list of the windows on the workspace, allowing you to activate the application (credit to [lyonell/all-windows](https://github.com/lyonel/all-windows) for some of the code and ideas). The buttons also allow switching to a given workspace if the option to do so has been toggled on (with a choice between Primary and Secondary button, depending on preference).
 
 While most of the functionality from the WorkspaceBar extension has been kept, some things have been removed. See further below for details. One new addition is the ability to adjust the colors used for the workspace labels across various states (urgent / hover / active / inactive / empty) from the preferences.
 
-This is how the Workspace Buttons look like in action with the current choice of styling. For reference the hover/active style for the buttons themselves (not the labels) is from the gnome-shell theme in use when taking these screenshots, specifically [Vertex Theme](https://github.com/horst3180/vertex-theme).
+This is how the Workspace Buttons look like in action with the current choice of styling (using a slightly tweaked Adwaita gnome-shell theme).
 
 ![Workspace Buttons in action](./screenshots/workspace-buttons-names.png?raw=true)
 - The active/current workspace defaults to bright white text
@@ -19,13 +19,15 @@ This is how the Workspace Buttons look using the Activity Indicator option and w
 
 ![Workspace Buttons in action with activity indicators](./screenshots/workspace-buttons-indicators.png?raw=true)
 
-This is how the menu looks when opened. The left is the appearance with the panel at the top and the right is the appearance with the panel at the bottom (using BottomPanel - [Gnome Extensions Page](https://extensions.gnome.org/extension/949/bottompanel/) - [GitHub](https://github.com/Thoma5/gnome-shell-extension-bottompanel)).
+This is how the menu looks when opened.
 
 ![Workspace Buttons with the menu open](./screenshots/workspace-buttons-menus.png?raw=true)
 
 These are the General Settings on the Settings page.
 
 ![Workspace Buttons - General Settings](./screenshots/settings-general.png?raw=true)
+
+**Note:** For the "Disable the workspace switcher popup" setting, as noted, the disabling of the workspace switcher popup will not work if another workspace switcher popup extension is installed, regardless of whether it's enabled or not (avoid installing another extension that does workspace switcher stuff with this setting enabled). This includes things that modify the workspace switcher or override it in some way.
 
 This is the Workspace Label Format settings page which is used to change the settings for how the workspace labels appear. The format settings are somewhat more extensive and allow a greater degree of customization.
 
@@ -65,3 +67,4 @@ Thanks to these people for code of theirs that I've used.
 - null4bl3
 - lyonell
 - hackedbellini
+- windsorschmidt
