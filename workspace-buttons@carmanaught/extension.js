@@ -4,7 +4,6 @@
 
 const { Clutter, Gio, GLib, GObject, Meta, Shell, St } = imports.gi;
 
-const Mainloop   = imports.mainloop;
 const Util       = imports.misc.util;
 
 const Main       = imports.ui.main;
@@ -670,7 +669,7 @@ function setPosition() {
     destroyWorkspaceButtons();
     let oldPanelBox = panelBox;
     Main.panel[`_${oldPanelBox}Box`].remove_actor(buttonBox);
-    Mainloop.timeout_add(100, () => {
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 100, () => {
         buildWorkspaceButtons();
         return false;
     });
@@ -700,14 +699,14 @@ function enable() {
         // Only change the workspaces once, after a delay to allow for workspaces to be removed and
         // to prevent errors with sudden repeated workspace count changes.
         if (workspacesChanged === false) {
-            Mainloop.timeout_add(100, () => {
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 100, () => {
                 destroyWorkspaceButtons();
                 buildWorkspaceButtons();
                 // Reset this in the timeout so that future workspace changes will work.
                 workspacesChanged = false;
                 return false;
             });
-            // Use this to avoid adding new timeouts to the Mainloop.
+            // Use this to avoid adding new timeouts.
             workspacesChanged = true;
         }
     }));
@@ -748,7 +747,7 @@ function enable() {
         updateButtonStyles();
     }));
 
-    Mainloop.timeout_add(500, () => {
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
         buildWorkspaceButtons();
         return false;
     });
