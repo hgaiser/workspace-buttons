@@ -18,7 +18,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 const Prefs = Me.imports.prefs;
-const PrefsDialog = "gnome-shell-extension-prefs workspace-buttons@carmanaught.gmail.com";
+const PrefsDialog = "gnome-shell-extension-prefs workspace-buttons@carmanaught";
 
 const KEYS = Me.imports.keys;
 
