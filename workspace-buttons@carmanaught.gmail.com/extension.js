@@ -2,12 +2,7 @@
 // null4bl3 for some empty workspace detection ideas and lyonell for some code
 // from All Windows for filtering lists of windows in workspaces.
 
-const Clutter    = imports.gi.Clutter;
-const Gio        = imports.gi.Gio;
-const GObject    = imports.gi.GObject;
-const Meta       = imports.gi.Meta;
-const Shell      = imports.gi.Shell;
-const St         = imports.gi.St;
+const { Clutter, Gio, GLib, GObject, Meta, Shell, St } = imports.gi;
 
 const Mainloop   = imports.mainloop;
 const Util       = imports.misc.util;
