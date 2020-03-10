@@ -86,9 +86,11 @@ class WorkspaceButton extends PanelMenu.Button {
     // I'm not sure about touch handling here. Ideally a regular touch should toggle the
     // menu, and a hold touch should bring the menu up after a short period, but I have
     // no touch device to test, so I'll leave the TOUCH_END to trigger the toggle.
-    _onEvent(actor, event) {
+    vfunc_event(event) {
         let doToggle = true;
-        if (this.menu && (event.type() === Clutter.EventType.TOUCH_END ||  event.type() === Clutter.EventType.BUTTON_RELEASE || event.type() === Clutter.EventType.SCROLL)) {
+        if (this.menu && (event.type() === Clutter.EventType.TOUCH_END ||
+                          event.type() === Clutter.EventType.BUTTON_RELEASE ||
+                          event.type() === Clutter.EventType.SCROLL)) {
             if (event.type() === Clutter.EventType.BUTTON_RELEASE) {
                 if (this.clickActivate === true) {
                     let buttonCheck = (this.buttonActivate === "Primary") ? 1 : (this.buttonActivate === "Secondary") ? 3 : 1;
@@ -100,7 +102,7 @@ class WorkspaceButton extends PanelMenu.Button {
             }
 
             if (event.type() === Clutter.EventType.SCROLL) {
-                this._scrollWorkspace(actor, event);
+                this._scrollWorkspace(event);
                 doToggle = false;
             }
 
@@ -514,7 +516,7 @@ class WorkspaceButton extends PanelMenu.Button {
         this._setWorkspace(this.currentWorkSpace);
     }
 
-    _scrollWorkspace(actor, event) {
+    _scrollWorkspace(event) {
         let direction = event.get_scroll_direction();
         let offSet = 0;
 
