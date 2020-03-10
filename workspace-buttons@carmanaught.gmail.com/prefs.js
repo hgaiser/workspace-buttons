@@ -224,8 +224,6 @@ const WorkspaceButtonsSettings = GObject.registerClass(
             this.cmbButtonActivate.append_text(BUTTONS[i]);
         }
 
-        this.cmbButtonActivate.append_text("Primary");
-        this.cmbButtonActivate.append_text("Secondary");
         this.cmbButtonActivate.set_active(BUTTONS.indexOf(this._settings.get_string(KEYS.buttonToActivate)));
         this.cmbButtonActivate.connect ("changed", () => {
             this._settings.set_string(KEYS.buttonToActivate, BUTTONS[this.cmbButtonActivate.active]);
