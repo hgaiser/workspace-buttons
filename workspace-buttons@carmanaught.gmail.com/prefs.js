@@ -11,7 +11,6 @@ const _N = function(x) { return x; }
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
 
 const KEYS = Me.imports.keys;
 
@@ -70,7 +69,7 @@ const WorkspaceButtonsSettings = GObject.registerClass(
         this.margin = 10;
         this.column_spacing = 50;
         this.row_spacing = 10;
-	    this._settings = Convenience.getSettings();
+        this._settings = ExtensionUtils.getSettings();
 
         // Start building the objects
 
@@ -243,7 +242,7 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         this.margin = 10;
         this.column_spacing = 50;
         this.row_spacing = 10;
-	    this._settings = Convenience.getSettings();
+        this._settings = ExtensionUtils.getSettings();
 
         // Start building the objects
 
@@ -559,7 +558,7 @@ const WorkspaceButtonsWorkspaceColors = GObject.registerClass(
         this.margin = 10;
         this.column_spacing = 50;
         this.row_spacing = 10;
-	    this._settings = Convenience.getSettings();
+        this._settings = ExtensionUtils.getSettings();
 
         // Start building the objects
 
@@ -691,7 +690,7 @@ const WorkspaceButtonsWorkspaceColors = GObject.registerClass(
 });
 
 function init() {
-    Convenience.initTranslations();
+    ExtensionUtils.initTranslations();
 }
 
 function buildPrefsWidget() {

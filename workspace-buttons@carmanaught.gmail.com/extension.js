@@ -21,7 +21,6 @@ const _ = Gettext.domain("workspace-buttons").gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
 
 const Prefs = Me.imports.prefs;
 const PrefsDialog = "gnome-shell-extension-prefs workspace-buttons@carmanaught.gmail.com";
@@ -688,7 +687,7 @@ function setPosition() {
 }
 
 function init () {
-    _settings = Convenience.getSettings();
+    _settings = ExtensionUtils.getSettings();
     updateStyleList();
     // Get this to define which panel box to work with (_leftBox/_centerBox/_rightBox)
     panelBox = _settings.get_string(KEYS.buttonsPos);
