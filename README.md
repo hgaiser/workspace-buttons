@@ -15,7 +15,7 @@ This is how the Workspace Buttons look like in action with the current choice of
 - The empty workspaces with no window/application in them default to a dark grey text
 - Hovering over a workspace defaults to bright white text
 
-This is how the Workspace Buttons look using the Activity Indicator option and with some indicators in use. The indicators are  (U+F10C),  (U+F192),  (U+F111) for those interested. If you can't see the characters, you'll likely need [Font Awesome](http://fontawesome.io/icons/) (version 4, not 5) for them to be visible (check your distribution repositories).
+This is how the Workspace Buttons look using the Activity Indicator option and with some indicators in use. The indicators (using [Font Awesome](http://fontawesome.io/icons/) version 4, not 5) for active, inactive and empty workspaces are U+F10C, U+F192, U+F111 respectively, for those interested.
 
 ![Workspace Buttons in action with activity indicators](./screenshots/workspace-buttons-indicators.png?raw=true)
 
@@ -26,8 +26,6 @@ This is how the menu looks when opened.
 These are the General Settings on the Settings page.
 
 ![Workspace Buttons - General Settings](./screenshots/settings-general.png?raw=true)
-
-**Note:** For the "Disable the workspace switcher popup" setting, as noted, the disabling of the workspace switcher popup will not work if another workspace switcher popup extension is installed, regardless of whether it's enabled or not (avoid installing another extension that does workspace switcher stuff with this setting enabled). This includes things that modify the workspace switcher or override it in some way.
 
 This is the Workspace Label Format settings page which is used to change the settings for how the workspace labels appear. The format settings are somewhat more extensive and allow a greater degree of customization.
 
