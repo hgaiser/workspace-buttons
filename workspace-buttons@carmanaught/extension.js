@@ -46,7 +46,7 @@ class WorkspaceButton extends PanelMenu.Button {
         this.workspaceManager = getWorkspaceManager();
         this.metaWorkspace = this.workspaceManager.get_workspace_by_index(this.wsIndex);
         // Change the button styling to reduce padding (normally "panel-button" style)
-        this.actor.add_style_class_name("reduced-padding");
+        this.add_style_class_name("reduced-padding");
 
         // Initialize settings before anything else
         this._initSettings();
@@ -64,7 +64,7 @@ class WorkspaceButton extends PanelMenu.Button {
 
         // Add the label to the button box and add the button box to this PanelMenu.Button
         this.workspaceButtonBox.add_child(this.workspaceLabel);
-        this.actor.add_child(this.workspaceButtonBox);
+        this.add_child(this.workspaceButtonBox);
 
         // Now that we've created the label, update the label text and style the label
         this._updateLabel();
@@ -251,7 +251,7 @@ class WorkspaceButton extends PanelMenu.Button {
 
         // Connect to the signals for enter-event/leave-event for this button and change the
         // style as needed.
-        this._hoverOverSignal = this.actor.connect("enter-event", () => {
+        this._hoverOverSignal = this.connect("enter-event", () => {
             // Change hover (except for urgent or if the menu is already open)
             if (!this.workspaceLabel._urgent) {
                 if (!this.menu.isOpen) {
@@ -259,7 +259,7 @@ class WorkspaceButton extends PanelMenu.Button {
                 }
             }
         })
-        this._hoverOutSignal = this.actor.connect("leave-event", () => {
+        this._hoverOutSignal = this.connect("leave-event", () => {
             // Change style back
             if (!this.workspaceLabel._urgent) {
                 this._updateStyle();
@@ -301,8 +301,8 @@ class WorkspaceButton extends PanelMenu.Button {
 
         // Disconnect various other signals
         this.menu.disconnect(this._menuStateSignal);
-        this.actor.disconnect(this._hoverOverSignal);
-        this.actor.disconnect(this._hoverOutSignal);
+        this.disconnect(this._hoverOverSignal);
+        this.disconnect(this._hoverOutSignal);
     }
 
     _updateMenu() {
