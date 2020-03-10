@@ -691,7 +691,8 @@ function enable() {
     let workspacesChanged = false;
     let workspaceManager = getWorkspaceManager();
     buttonBox = new St.BoxLayout();
-    buttonBox.accessible_name = "buttonBox"
+    buttonBox.accessible_name = "workspaceButtonBox";
+    Main.panel.statusArea[buttonBox.accessible_name] = buttonBox;
 
     workspaceSignals = [];
     // It's easiest if we rebuild the buttons when workspaces are removed or added
