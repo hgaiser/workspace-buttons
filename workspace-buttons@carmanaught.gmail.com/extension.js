@@ -15,7 +15,6 @@ const Util       = imports.misc.util;
 const Main       = imports.ui.main;
 const PanelMenu  = imports.ui.panelMenu;
 const PopupMenu  = imports.ui.popupMenu;
-const WSPopup    = imports.ui.workspaceSwitcherPopup;
 
 const Gettext    = imports.gettext;
 const _ = Gettext.domain("workspace-buttons").gettext;
@@ -585,9 +584,6 @@ let buttonBox;
 let workspaceButton;
 let workspaceSignals;
 
-let workSwitcherProto;
-let workSwitcherConflict;
-
 function getWorkspaceManager() {
     let workspaceManager;
 
@@ -691,47 +687,6 @@ function setPosition() {
     });
 }
 
-// Detect other workspace switcher popup extensions so that we don't conflict. Only
-// the existence of another workspace switcher instead of checking if the potential
-// conflict is enabled is checked, because we can't chance that another extension
-// might be enabled sometime after this detection.
-function detectSwitcherExtensions() {
-    let extensionList = Object.keys(ExtensionUtils.extensions);
-    let switcherExtensions = ["disable-workspace-switcher-popup@github.com",
-    "no-workspace-switcher-popup@devbury.com",
-    "workspace-grid@mathematical.coffee.gmail.com",
-    "wsmatrix@martin.zurowietz.de"];
-    for (let i = 0; i < switcherExtensions.length; i++) {
-        // If we've already detected an extenion, don't bother checking the others
-        if (workSwitcherConflict !== true) {
-            if (extensionList.includes(switcherExtensions[i])) {
-                workSwitcherConflict = true;
-            } else {
-                workSwitcherConflict = false;
-            }
-        }
-    }
-}
-
-// Credit to windsorschmidt/disable-workspace-switcher-popup for the code used here
-function workspaceSwitcherPopup(popupDisable) {
-    // Exit the function if a conflict has been detected so that we don't try to do
-    // conflicting workspace switcher function overrides.
-    if (workSwitcherConflict === true) { return; }
-
-    if (popupDisable !== false) {
-        popupDisable = _settings.get_boolean(KEYS.workSwitcherPopup);
-    }
-
-    if (popupDisable) {
-        workSwitcherProto = WSPopup.WorkspaceSwitcherPopup.prototype._show;
-        WSPopup.WorkspaceSwitcherPopup.prototype._show = function() { return false };
-    } else {
-        WSPopup.WorkspaceSwitcherPopup.prototype._show = workSwitcherProto;
-        workSwitcherProto = null;
-    }
-}
-
 function init () {
     _settings = Convenience.getSettings();
     updateStyleList();
@@ -749,8 +704,6 @@ function enable() {
     let workspaceManager = getWorkspaceManager();
     buttonBox = new St.BoxLayout();
     buttonBox.accessible_name = "buttonBox"
-    // Get the 'old' workspace switcher _show function
-    workSwitcherProto = WSPopup.WorkspaceSwitcherPopup.prototype._show;
 
     workspaceSignals = [];
     // It's easiest if we rebuild the buttons when workspaces are removed or added
@@ -806,15 +759,8 @@ function enable() {
         updateButtonStyles();
     }));
 
-    // Handle the enabling/disabling of the workspace switcher popup
-    globalSettingsSignals.push(_settings.connect_after("changed::" + KEYS.workSwitcherPopup, () => {
-        workspaceSwitcherPopup();
-    }));
-
     Mainloop.timeout_add(500, () => {
         buildWorkspaceButtons();
-        detectSwitcherExtensions();
-        workspaceSwitcherPopup();
         return false;
     });
 }
@@ -836,7 +782,4 @@ function disable() {
 
     destroyWorkspaceButtons();
     buttonBox.destroy();
-
-    workspaceSwitcherPopup(false);
-    workSwitcherProto == null;
 }

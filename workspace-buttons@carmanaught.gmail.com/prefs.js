@@ -232,25 +232,6 @@ const WorkspaceButtonsSettings = GObject.registerClass(
             this._settings.set_string(KEYS.buttonToActivate, BUTTONS[this.cmbButtonActivate.active]);
         });
         this.attach(this.cmbButtonActivate, 2, 7, 1, 1);
-
-        // Show Disable Workspace Switcher Popup label
-        let lblSwitcherPopup = new Gtk.Label({
-            label: _("Disable the workspace switcher popup") + "\n<span font_size='small'>" + _("WARNING: Will NOT work while workspace switcher popup extensions are installed.") + "</span>",
-            margin_left: 15,
-            use_markup: true,
-            halign: Gtk.Align.START
-        });
-        this.attach(lblSwitcherPopup, 0, 8, 2, 1);
-
-        // Show Disable Workspace Switcher Popup switch
-        let swSwitcherPopup = new Gtk.Switch({
-            active: this._settings.get_boolean(KEYS.workSwitcherPopup),
-            halign: Gtk.Align.END
-        });
-        swSwitcherPopup.connect ("notify::active", () => {
-            this._settings.set_boolean(KEYS.workSwitcherPopup, swSwitcherPopup.active);
-        });
-        this.attach(swSwitcherPopup, 2, 8, 1, 1);
     }
 });
 

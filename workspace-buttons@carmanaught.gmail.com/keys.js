@@ -17,4 +17,3 @@ var hoverColor =         "hover-color";
 var activeColor =        "active-color";
 var inactiveColor =      "inactive-color";
 var emptyColor =         "empty-color";
-var workSwitcherPopup =  "workspace-switcher-popup";
