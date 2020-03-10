@@ -191,7 +191,8 @@ const WorkspaceButtonsSettings = GObject.registerClass(
         // Show Click to Activate switch
         let swClickActivate = new Gtk.Switch({
             active: this._settings.get_boolean(KEYS.clickToActivate),
-            halign: Gtk.Align.END
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER
         });
         swClickActivate.connect ("notify::active", () => {
             this._settings.set_boolean(KEYS.clickToActivate, swClickActivate.active);
@@ -262,7 +263,8 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         let swEmptyWorkspaceHide = new Gtk.Switch({
             active: this._settings.get_boolean(KEYS.emptyWorkHide),
             sensitive: true,
-            halign: Gtk.Align.END
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER
         });
         swEmptyWorkspaceHide.connect ("notify::active", () => {
             this._settings.set_boolean(KEYS.emptyWorkHide, swEmptyWorkspaceHide.active);
@@ -407,7 +409,8 @@ const WorkspaceButtonsWorkspaceFormat = GObject.registerClass(
         // Show activity indicators switch
         let swActInd = new Gtk.Switch({
             active: this._settings.get_boolean(KEYS.indLabel),
-            halign: Gtk.Align.END
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER
         });
         swActInd.connect ("notify::active", () => {
             this._settings.set_boolean(KEYS.indLabel, swActInd.active);
