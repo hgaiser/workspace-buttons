@@ -532,7 +532,7 @@ class WorkspaceButton extends PanelMenu.Button {
     }
 
     _activateWindow(metaWorkspace, metaWindow) {
-        if (metaWorkspace.index() !== this.wsIndex) {
+        if (metaWorkspace.index() !== this.workspaceManager.get_active_workspace().index()) {
             if(!metaWindow.is_on_all_workspaces()) {
                 metaWorkspace.activate_with_focus(metaWindow, global.get_current_time());
             } else {
@@ -540,6 +540,12 @@ class WorkspaceButton extends PanelMenu.Button {
             }
         } else {
             metaWindow.activate(global.get_current_time());
+        }
+        // Ensure that the menu closes after activating a window. This seems to
+        // only happen activating a window on another workspace, but this should
+        // ensure that it closes.
+        if (this.menu.isOpen) {
+            this.menu.toggle();
         }
     }
 
