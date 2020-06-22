@@ -593,11 +593,11 @@ function getWorkspaceManager() {
 }
 
 function updateStyleList() {
-    styleUrgent     = "color:" + _settings.get_string(KEYS.urgentColor);
-    styleHover      = "color:" + _settings.get_string(KEYS.hoverColor);
-    styleActive     = "color:" + _settings.get_string(KEYS.activeColor);
-    styleInactive   = "color:" + _settings.get_string(KEYS.inactiveColor);
-    styleEmpty      = "color:" + _settings.get_string(KEYS.emptyColor);
+    styleUrgent     = "color:" + _settings.get_string(KEYS.urgentColor) + ";margin-top: 2px solid " + _settings.get_string(KEYS.urgentColor);
+    styleHover      = "color:" + _settings.get_string(KEYS.hoverColor) + ";border-top: 2px solid " + _settings.get_string(KEYS.hoverColor);
+    styleActive     = "color:" + _settings.get_string(KEYS.activeColor) + ";border-top: 2px solid " + _settings.get_string(KEYS.activeColor);
+    styleInactive   = "color:" + _settings.get_string(KEYS.inactiveColor) + ";margin-top: 2px";
+    styleEmpty      = "color:" + _settings.get_string(KEYS.emptyColor) + ";margin-top: 2px";
 }
 
 function updateButtonStyles() {
