@@ -89,9 +89,9 @@ class WorkspaceButton extends PanelMenu.Button {
     vfunc_event(event) {
         let doToggle = true;
         if (this.menu && (event.type() === Clutter.EventType.TOUCH_END ||
-                          event.type() === Clutter.EventType.BUTTON_RELEASE ||
+                          event.type() === Clutter.EventType.BUTTON_PRESS ||
                           event.type() === Clutter.EventType.SCROLL)) {
-            if (event.type() === Clutter.EventType.BUTTON_RELEASE) {
+            if (event.type() === Clutter.EventType.BUTTON_PRESS) {
                 if (this.clickActivate === true) {
                     let buttonCheck = (this.buttonActivate === "Primary") ? 1 : (this.buttonActivate === "Secondary") ? 3 : 1;
                     if (event.get_button() === buttonCheck && !this.menu.isOpen) {
