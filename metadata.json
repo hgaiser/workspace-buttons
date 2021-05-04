@@ -6,7 +6,8 @@
     "gettext-domain": "workspace-buttons",
     "settings-schema": "org.gnome.shell.extensions.workspacebuttons",
     "shell-version": [
-      "3.36"
+      "3.36",
+      "40"
     ],
     "url": "http://gitlab.com/carmanaught/gnome-shell-extension-workspace-buttons/",
     "version": 16
