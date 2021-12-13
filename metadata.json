@@ -7,7 +7,8 @@
     "settings-schema": "org.gnome.shell.extensions.workspacebuttons",
     "shell-version": [
       "3.36",
-      "40"
+      "40",
+      "41"
     ],
     "url": "http://gitlab.com/carmanaught/gnome-shell-extension-workspace-buttons/",
     "version": 16
